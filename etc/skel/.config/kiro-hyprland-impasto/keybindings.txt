@@ -1,0 +1,193 @@
+###############################################################################
+#  KEYBINDINGS — Kiro Hyprland Impasto
+#  Source: etc/skel/.config/kiro-hyprland-impasto/modules/keybinds.lua
+#  The defaults of the Kiro profile. Remap any of them in impasto's Settings → Keys;
+#  changed yours? Edit this file to match.
+#  Shell:  impasto (Quickshell) — panels on super + alt, `impasto` command for the rest
+###############################################################################
+
+── 1. Applications & Launchers ────────────────────────────────────────────────
+  super + Return            Open a terminal
+  super + shift + Return    Open the file manager
+  super + B                 Open the browser
+  super + T                 Open a terminal
+  ctrl + alt + Return       Open a terminal
+  ctrl + alt + T            Open a terminal
+  super + shift + F         Open the file manager
+  super + E                 Open the code editor
+  super + shift + B         Open the browser
+  super + shift + M         Open Spotify
+  super + ctrl + shift + A  Open the AI agent
+  super + V                 Open the volume control
+  super + ctrl + A          Open the volume control
+  ctrl + alt + U            Open the volume control
+  ctrl + alt + END          Open the system monitor
+  ctrl + shift + Escape     Open the system monitor
+  ctrl + alt + A            Alacritty tweak tool
+  ctrl + alt + Q            Alacritty tweak tool
+  ctrl + alt + B            Brave
+  ctrl + alt + C            Chromium
+  ctrl + alt + G            Chromium
+  ctrl + alt + D            OBS Studio
+  ctrl + alt + E            ArchLinux Tweak Tool
+  ctrl + alt + S            Fish tweak tool
+  ctrl + alt + H            KiroTux Hyprland Premium
+  ctrl + alt + F            Firefox
+  ctrl + alt + I            Kiro ISO builder
+  ctrl + alt + L            Logout settings
+  ctrl + alt + M            USB image writer
+  ctrl + alt + O            Opera
+  ctrl + alt + P            Package manager
+  ctrl + alt + V            Vivaldi
+  ctrl + alt + W            Fastfetch tweak tool
+  ctrl + alt + Z            Fastfetch tweak tool
+  super + F1                Browser
+  super + F2                Code editor
+  super + F3                Inkscape
+  super + F4                GIMP
+  super + F5                Meld
+  super + F6                VLC
+  super + F7                VirtualBox
+  super + F8                File manager
+  super + F9                Virt-manager
+  super + F10               Spotify
+
+── 2. Window Management ───────────────────────────────────────────────────────
+  super + Q               Close the focused window
+  super + alt + Q         Kill the focused window
+  super + F               Full screen
+  super + alt + F         Maximise, keeping the bar
+  super + shift + Space   Float or tile the window
+  super + left            Focus the window left
+  super + right           Focus the window right
+  super + up              Focus the window up
+  super + down            Focus the window down
+  alt + Tab               Next window
+  alt + shift + Tab       Previous window
+  super + shift + left    Move the window left
+  super + shift + right   Move the window right
+  super + shift + up      Move the window up
+  super + shift + down    Move the window down
+  super + mouse:272       Drag the window
+  super + mouse:273       Resize the window
+  super + shift + Q       Close the focused window
+  super + H               Focus the window left
+  super + L               Focus the window right
+  super + K               Focus the window up
+  super + shift + H       Narrower
+  super + shift + L       Wider
+  super + shift + K       Shorter
+  super + shift + J       Taller
+  super + U               Show or hide the scratchpad
+  super + shift + U       Send the window to the scratchpad
+
+── 3. Workspaces / Screens / Groups ───────────────────────────────────────────
+  super + 1 … 0                Go to workspace 1–10 (again: back to the previous one)
+  super + ctrl + 1 … 0         Move the window to workspace 1–10 and follow it
+  super + shift + 1 … 0        Send the window to workspace 1–10
+  super + mouse_down           Next workspace
+  super + mouse_up             Previous workspace
+  super + alt + left           Focus the screen left
+  super + alt + right          Focus the screen right
+  super + alt + shift + left   Take the workspace to the screen left
+  super + alt + shift + right  Take the workspace to the screen right
+  super + G                    Toggle a group
+  super + ctrl + left          Into the group left
+  super + ctrl + right         Into the group right
+  super + ctrl + up            Into the group up
+  super + ctrl + down          Into the group down
+  super + period               Next workspace
+  super + comma                Previous workspace
+  super + TAB                  Next workspace
+  super + shift + TAB          Previous workspace
+
+── 4. Layout & Tiling ─────────────────────────────────────────────────────────
+  super + P               Toggle pseudo-tiling
+  super + J               Flip the split direction
+  super + alt + Space     Cycle the layout
+  super + I               Add a master
+  super + shift + I       Remove a master
+
+── 5. Desktop Shell (impasto, panels on super + alt) ──────────────────────────
+  super + Space            Open the launcher
+  super + S                Open the control centre
+  super + alt + TAB        Open the workspace overview
+  super + shift + S        Open settings
+  super + alt + A          Open appearance
+  super + alt + P          Open the palette
+  super + alt + U          Open system statistics
+  super + alt + shift + P  Open the pet
+  super + alt + G          Open the games
+  super + alt + N          Open the notes
+  super + alt + K          Open the task board
+  super + alt + H          Show every key
+  super + ctrl + B         Hide or show the bar
+  super + ctrl + W         Hide or show the desktop widgets
+  super + alt + shift + G  Turn game mode on or off
+  super + alt + I          Open the packages
+  super + alt + M          Open the virtual machines
+  super + alt + O          Open the development servers
+  super + alt + Y          Open the screen time
+  super + shift + C        Open the clipboard history
+  super + alt + E          Pick an emoji
+  super + alt + shift + C  Pick a colour off the screen
+  super + D                Open the launcher
+  super + ctrl + Return    Open the launcher
+  super + F11              Open the launcher
+  super + F12              Open the launcher
+  super + shift + N        Open the control centre
+  super + shift + W        Open appearance
+
+── 6. Multimedia & Hardware (work while locked) ───────────────────────────────
+  XF86AudioRaiseVolume        Volume up
+  XF86AudioLowerVolume        Volume down
+  XF86AudioMute               Mute output
+  XF86AudioMicMute            Mute microphone
+  XF86MonBrightnessUp         Brightness up
+  XF86MonBrightnessDown       Brightness down
+  XF86Launch6                 Mute microphone (Acer)
+  XF86AudioPlay               Play or pause
+  XF86AudioPause              Play or pause
+  XF86AudioNext               Next track
+  XF86AudioPrev               Previous track
+  alt + XF86AudioRaiseVolume  Volume up 1%
+  alt + XF86AudioLowerVolume  Volume down 1%
+
+── 6b. Wallpaper (Variety, the palette follows) ───────────────────────────────
+  alt + N                 Next
+  alt + Right             Next
+  alt + shift + N         Next
+  alt + P                 Previous
+  alt + Left              Previous
+  alt + shift + P         Previous
+  alt + T                 Trash
+  alt + shift + T         Trash
+  alt + F                 Favourite
+  alt + shift + F         Favourite
+  alt + Up                Pause
+  alt + Down              Resume
+  alt + W                 Selector
+
+── 7. Screenshots & Recording ─────────────────────────────────────────────────
+  super + alt + S         Open the capture surface
+  shift + Print           Open the capture surface
+  super + alt + R         Start or stop recording the screen
+  Print                   Screenshot a region
+  super + Print           Screenshot the screen
+
+── 8. System & Session ────────────────────────────────────────────────────────
+  super + alt + X         Session menu
+  ctrl + alt + Delete     Session menu
+  XF86PowerOff            Session menu
+  super + alt + L         Lock the screen
+  super + shift + E       Exit Hyprland
+  super + shift + D       Turn the screen off or back on
+  super + ctrl + R        Restart the shell
+  super + X               Logout menu
+  super + shift + X       Logout menu
+  ctrl + alt + K          Logout menu
+  super + ctrl + L        Lock the screen
+  ctrl + alt + R          Lock the screen
+  super + Escape          Click a window to kill it
+  super + ctrl + S        Show the Kiro keybindings
+  super + shift + R       Reload Hyprland
