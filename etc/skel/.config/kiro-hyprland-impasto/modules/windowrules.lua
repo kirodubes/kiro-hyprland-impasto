@@ -192,3 +192,14 @@ hl.layer_rule({
     blur         = true,
     ignore_alpha = 0.12,
 })
+
+
+-- ── KIRO ────────────────────────────────────────────────────────────────────
+
+-- Kiro: the terminal rules of the other Kiro Hyprland editions. Alacritty is the
+-- default terminal here; btop starts as `alacritty --class btop`, which the
+-- Alacritty class would not match, so it has its own, more transparent rule.
+hl.window_rule({ match = { class = "^(Alacritty)$" },     opacity = "0.90 0.85" })
+hl.window_rule({ match = { class = "^(btop)$" },          opacity = "0.80 0.75" })
+hl.window_rule({ match = { class = "(Alacritty|kitty)" }, scroll_touchpad = 1.5 })
+hl.window_rule({ match = { class = "^(Spotify)$" },       tile = true })

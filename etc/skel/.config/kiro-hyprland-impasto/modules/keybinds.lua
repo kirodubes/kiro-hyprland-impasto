@@ -12,6 +12,12 @@
 local apps    = require("modules.programs")
 local mainMod = "SUPER"
 
+-- Kiro: the Kiro scheme wins every chord it uses on the other Kiro Hyprland editions;
+-- impasto's panels sit on SUPER + ALT. Profiles (Settings → Keys) carry the same table.
+local logout      = "archlinux-logout"
+local keybindings = "kiro-keybindings"
+local function run(cmd) return hl.dsp.exec_cmd(cmd) end
+
 
 -- ── PROFILE KEYS ────────────────────────────────────────────────────────────
 
@@ -62,7 +68,7 @@ hl.config({
 -- ── APPLICATIONS ────────────────────────────────────────────────────────────
 
 bind(mainMod .. " + Return", hl.dsp.exec_cmd(apps.terminal),     { description = "Applications · Open a terminal" })
-bind(mainMod .. " + E",      hl.dsp.exec_cmd(apps.file_manager), { description = "Applications · Open the file manager" })
+bind("SUPER + SHIFT + Return",      hl.dsp.exec_cmd(apps.file_manager), { description = "Applications · Open the file manager" })
 bind(mainMod .. " + B",      hl.dsp.exec_cmd(apps.browser),      { description = "Applications · Open the browser" })
 
 
@@ -116,13 +122,13 @@ local function flip_split()
 end
 
 bind(mainMod .. " + Q",           hl.dsp.window.close(), { description = "Windows · Close the focused window" })
-bind(mainMod .. " + SHIFT + Q",   hl.dsp.window.kill(),  { description = "Windows · Kill the focused window" })
+bind("SUPER + ALT + Q",   hl.dsp.window.kill(),  { description = "Windows · Kill the focused window" })
 bind(mainMod .. " + F",           hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }), { description = "Windows · Full screen" })
 bind(mainMod .. " + ALT + F",     hl.dsp.window.fullscreen({ mode = "maximized", action = "toggle" }),  { description = "Windows · Maximise, keeping the bar" })
-bind(mainMod .. " + ALT + Space", float_centred,          { description = "Windows · Float or tile the window" })
+bind("SUPER + SHIFT + Space", float_centred,          { description = "Windows · Float or tile the window" })
 bind(mainMod .. " + P",           hl.dsp.window.pseudo(), { description = "Windows · Toggle pseudo-tiling" })
 bind(mainMod .. " + J",           flip_split,             { description = "Windows · Flip the split direction" })
-bind(mainMod .. " + SHIFT + L",   hl.dsp.global("quickshell:layout"), { description = "Windows · Cycle the layout" })
+bind("SUPER + ALT + Space",   hl.dsp.global("quickshell:layout"), { description = "Windows · Cycle the layout" })
 
 -- · move focus
 bind(mainMod .. " + left",  hl.dsp.focus({ direction = "l" }), { description = "Windows · Focus the window left" })
@@ -223,10 +229,10 @@ local function to_workspace(index)
 end
 
 -- Into this screen's own ten, or the shared ten.
-local function move_to_workspace(index)
+local function move_to_workspace(index, follow)
     return function()
         local monitor = hl.get_active_monitor()
-        hl.dispatch(hl.dsp.window.move({ workspace = screen_base(monitor) + index }))
+        hl.dispatch(hl.dsp.window.move({ workspace = screen_base(monitor) + index, follow = follow }))
     end
 end
 
@@ -235,12 +241,16 @@ end
 -- Shared, a number brings its workspace to the screen you are on rather than
 -- taking you to the screen it is on: `on_current_monitor` swaps the two
 -- screens' workspaces where it has to. Per screen, it is this screen's own.
+-- Kiro: key codes (code:10 = "1" … code:19 = "0") so the numbers work on qwerty and
+-- azerty alike; CTRL moves the window and follows it, SHIFT sends it and stays.
 for i = 1, 10 do
-    local key = i % 10  -- 10 maps to the 0 key
+    local key = "code:" .. (i + 9)
     bind(mainMod .. " + " .. key,         to_workspace(i),
          { description = "Workspaces · Go to workspace " .. i })
-    bind(mainMod .. " + SHIFT + " .. key, move_to_workspace(i),
+    bind(mainMod .. " + CTRL + " .. key,  move_to_workspace(i, true),
          { description = "Workspaces · Move the window to workspace " .. i })
+    bind(mainMod .. " + SHIFT + " .. key, move_to_workspace(i, false),
+         { description = "Workspaces · Send the window to workspace " .. i })
 end
 
 -- · scroll wheel to cycle through the ones on this screen
@@ -326,10 +336,10 @@ bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),   { locked = true,
 -- · the power button opens the session menu instead of powering off (logind
 -- · is told to ignore it, see system/etc/systemd/logind.conf.d/). Some
 -- · machines never report a short press, so the menu has keyboard binds too.
-bind(mainMod .. " + X",         hl.dsp.global("quickshell:session"), { description = "Session · Session menu" })
+bind("SUPER + ALT + X",         hl.dsp.global("quickshell:session"), { description = "Session · Session menu" })
 bind("CTRL + ALT + Delete",     hl.dsp.global("quickshell:session"), { description = "Session · Session menu, from CTRL + ALT + Delete" })
 bind("XF86PowerOff",            hl.dsp.global("quickshell:session"), { description = "Session · Session menu, from the power button" })
-bind(mainMod .. " + L",         hl.dsp.global("quickshell:lock"),    { description = "Session · Lock the screen" })
+bind("SUPER + ALT + L",         hl.dsp.global("quickshell:lock"),    { description = "Session · Lock the screen" })
 bind(mainMod .. " + SHIFT + E", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"), { description = "Session · Exit Hyprland" })
 
 
@@ -346,52 +356,173 @@ bind(mainMod .. " + CTRL + R",  hl.dsp.exec_cmd("pkill -x quickshell; pkill -x q
 
 -- · global shortcuts registered by the shell
 bind(mainMod .. " + Space",     hl.dsp.global("quickshell:launcher"),   { description = "Shell · Open the launcher" })
-bind(mainMod .. " + A",         hl.dsp.global("quickshell:controls"),   { description = "Shell · Open the control centre" })
-bind(mainMod .. " + TAB",       hl.dsp.global("quickshell:overview"),   { description = "Shell · Open the workspace overview" })
-bind(mainMod .. " + comma",     hl.dsp.global("quickshell:settings"),   { description = "Shell · Open settings" })
-bind(mainMod .. " + T",         hl.dsp.global("quickshell:appearance"), { description = "Shell · Open appearance" })
-bind(mainMod .. " + SHIFT + T", hl.dsp.global("quickshell:palette"),    { description = "Shell · Open the palette" })
-bind(mainMod .. " + U",         hl.dsp.global("quickshell:stats"),      { description = "Shell · Open system statistics" })
-bind(mainMod .. " + SHIFT + P", hl.dsp.global("quickshell:pet"),        { description = "Shell · Open the pet" })
-bind(mainMod .. " + G",         hl.dsp.global("quickshell:games"),      { description = "Shell · Open the games" })
-bind(mainMod .. " + S",         hl.dsp.global("quickshell:notes"),      { description = "Shell · Open the notes" })
-bind(mainMod .. " + K",         hl.dsp.global("quickshell:board"),      { description = "Shell · Open the task board" })
+bind("SUPER + S",         hl.dsp.global("quickshell:controls"),   { description = "Shell · Open the control centre" })
+bind("SUPER + ALT + TAB",       hl.dsp.global("quickshell:overview"),   { description = "Shell · Open the workspace overview" })
+bind("SUPER + SHIFT + S",     hl.dsp.global("quickshell:settings"),   { description = "Shell · Open settings" })
+bind("SUPER + ALT + A",         hl.dsp.global("quickshell:appearance"), { description = "Shell · Open appearance" })
+bind("SUPER + ALT + P", hl.dsp.global("quickshell:palette"),    { description = "Shell · Open the palette" })
+bind("SUPER + ALT + U",         hl.dsp.global("quickshell:stats"),      { description = "Shell · Open system statistics" })
+bind("SUPER + ALT + SHIFT + P", hl.dsp.global("quickshell:pet"),        { description = "Shell · Open the pet" })
+bind("SUPER + ALT + G",         hl.dsp.global("quickshell:games"),      { description = "Shell · Open the games" })
+bind("SUPER + ALT + N",         hl.dsp.global("quickshell:notes"),      { description = "Shell · Open the notes" })
+bind("SUPER + ALT + K",         hl.dsp.global("quickshell:board"),      { description = "Shell · Open the task board" })
 
 -- · key sheet, read from `hyprctl binds`. H, since / is SHIFT + 7 on a
 -- · Spanish layout
-bind(mainMod .. " + H",         hl.dsp.global("quickshell:keys"),       { description = "Shell · Show every key" })
+bind("SUPER + ALT + H",         hl.dsp.global("quickshell:keys"),       { description = "Shell · Show every key" })
 
 -- · zen: the bar away and its band to the windows; and the widgets away
 bind(mainMod .. " + CTRL + B",  hl.dsp.global("quickshell:zen"),        { description = "Shell · Hide or show the bar" })
 bind(mainMod .. " + CTRL + W",  hl.dsp.global("quickshell:widgets"),    { description = "Shell · Hide or show the desktop widgets" })
-bind(mainMod .. " + SHIFT + G", hl.dsp.global("quickshell:game"),       { description = "Shell · Turn game mode on or off" })
+bind("SUPER + ALT + SHIFT + G", hl.dsp.global("quickshell:game"),       { description = "Shell · Turn game mode on or off" })
 
 -- · packages panel (pacman + AUR); installs run in a terminal
-bind(mainMod .. " + I",         hl.dsp.global("quickshell:packages"),   { description = "Shell · Open the packages" })
-bind(mainMod .. " + SHIFT + M", hl.dsp.global("quickshell:machines"),   { description = "Shell · Open the virtual machines" })
-bind(mainMod .. " + O",         hl.dsp.global("quickshell:servers"),    { description = "Shell · Open the development servers" })
-bind(mainMod .. " + Y",         hl.dsp.global("quickshell:screentime"), { description = "Shell · Open the screen time" })
-bind(mainMod .. " + SHIFT + W", hl.dsp.global("quickshell:camera"),     { description = "Shell · Open the camera effects" })
+bind("SUPER + ALT + I",         hl.dsp.global("quickshell:packages"),   { description = "Shell · Open the packages" })
+bind("SUPER + ALT + M", hl.dsp.global("quickshell:machines"),   { description = "Shell · Open the virtual machines" })
+bind("SUPER + ALT + O",         hl.dsp.global("quickshell:servers"),    { description = "Shell · Open the development servers" })
+bind("SUPER + ALT + Y",         hl.dsp.global("quickshell:screentime"), { description = "Shell · Open the screen time" })
+bind("", hl.dsp.global("quickshell:camera"),     { description = "Shell · Open the camera effects" })
 
 -- · clipboard history is a launcher mode
-bind(mainMod .. " + V",         hl.dsp.global("quickshell:clipboard"),  { description = "Shell · Open the clipboard history" })
+bind("SUPER + SHIFT + C",         hl.dsp.global("quickshell:clipboard"),  { description = "Shell · Open the clipboard history" })
 
 -- · emoji, a launcher mode too
-bind(mainMod .. " + period",    hl.dsp.global("quickshell:emoji"),      { description = "Shell · Pick an emoji" })
+bind("SUPER + ALT + E",    hl.dsp.global("quickshell:emoji"),      { description = "Shell · Pick an emoji" })
 
 -- · colour picker (hyprpicker); the result goes to the clipboard
-bind(mainMod .. " + SHIFT + C", hl.dsp.global("quickshell:picker"),     { description = "Shell · Pick a colour off the screen" })
+bind("SUPER + ALT + SHIFT + C", hl.dsp.global("quickshell:picker"),     { description = "Shell · Pick a colour off the screen" })
 
 -- · capture surface. The direct captures below are unbound by default and
 -- · can be assigned in Settings → Keys.
-bind(mainMod .. " + SHIFT + S", hl.dsp.global("quickshell:capture"), { description = "Shell · Open the capture surface" })
-bind("Print",                   hl.dsp.global("quickshell:capture"), { description = "Shell · Open the capture surface, from Print" })
-bind(mainMod .. " + SHIFT + R", hl.dsp.global("quickshell:record"),  { description = "Shell · Start or stop recording the screen" })
+bind("SUPER + ALT + S", hl.dsp.global("quickshell:capture"), { description = "Shell · Open the capture surface" })
+bind("SHIFT + Print",                   hl.dsp.global("quickshell:capture"), { description = "Shell · Open the capture surface, from Print" })
+bind("SUPER + ALT + R", hl.dsp.global("quickshell:record"),  { description = "Shell · Start or stop recording the screen" })
 bind("", hl.dsp.global("quickshell:captureRegion"), { description = "Shell · Capture a region" })
 bind("", hl.dsp.global("quickshell:captureWindow"), { description = "Shell · Capture a window" })
 bind("", hl.dsp.global("quickshell:captureScreen"), { description = "Shell · Capture the whole screen" })
 bind("", hl.dsp.global("quickshell:captureEdit"),   { description = "Shell · Capture a region and annotate it" })
 bind("", hl.dsp.global("quickshell:captureText"),   { description = "Shell · Read a region as text" })
+
+
+-- ── KIRO ────────────────────────────────────────────────────────────────────
+
+-- The Kiro scheme, as on kiro-hyprland-dms. Every bind has its own description, so
+-- each one can be remapped in Settings → Keys.
+
+-- · applications
+bind(mainMod .. " + T",                  run(apps.terminal),     { description = "Applications · Open a terminal, from SUPER + T" })
+bind("CTRL + ALT + Return",              run(apps.terminal),     { description = "Applications · Open a terminal, from CTRL + ALT + Return" })
+bind("CTRL + ALT + T",                   run(apps.terminal),     { description = "Applications · Open a terminal, from CTRL + ALT + T" })
+bind(mainMod .. " + SHIFT + F",          run(apps.file_manager), { description = "Applications · Open the file manager, from SUPER + SHIFT + F" })
+bind(mainMod .. " + E",                  run(apps.editor),       { description = "Applications · Open the code editor" })
+bind(mainMod .. " + SHIFT + B",          run(apps.browser),      { description = "Applications · Open the browser, from SUPER + SHIFT + B" })
+bind(mainMod .. " + SHIFT + M",          run("spotify"),         { description = "Applications · Open Spotify" })
+bind(mainMod .. " + CTRL + SHIFT + A",   run(apps.terminal .. " -e claude"), { description = "Applications · Open the AI agent" })
+bind(mainMod .. " + V",                  run("pavucontrol"),     { description = "Applications · Open the volume control" })
+bind(mainMod .. " + CTRL + A",           run("pavucontrol"),     { description = "Applications · Open the volume control, from SUPER + CTRL + A" })
+bind("CTRL + ALT + U",                   run("pavucontrol"),     { description = "Applications · Open the volume control, from CTRL + ALT + U" })
+bind("CTRL + ALT + END",                 run("alacritty --class btop -e btop"), { description = "Applications · Open the system monitor" })
+bind("CTRL + SHIFT + Escape",            run("alacritty --class btop -e btop"), { description = "Applications · Open the system monitor, from CTRL + SHIFT + Escape" })
+
+-- · CTRL + ALT launchers
+bind("CTRL + ALT + A", run("alacritty-tweak-tool"),                { description = "Kiro apps · Alacritty tweak tool" })
+bind("CTRL + ALT + Q", run("alacritty-tweak-tool"),                { description = "Kiro apps · Alacritty tweak tool, from CTRL + ALT + Q" })
+bind("CTRL + ALT + B", run("brave --password-store=basic"),        { description = "Kiro apps · Brave" })
+bind("CTRL + ALT + C", run("chromium -no-default-browser-check"),  { description = "Kiro apps · Chromium" })
+bind("CTRL + ALT + G", run("chromium -no-default-browser-check"),  { description = "Kiro apps · Chromium, from CTRL + ALT + G" })
+bind("CTRL + ALT + D", run("obs"),                                 { description = "Kiro apps · OBS Studio" })
+bind("CTRL + ALT + E", run("archlinux-tweak-tool"),                { description = "Kiro apps · ArchLinux Tweak Tool" })
+bind("CTRL + ALT + S", run("fish-tweak-tool"),                     { description = "Kiro apps · Fish tweak tool" })
+-- KiroTux Hyprland Premium comes with the KiroTux ISOs: open it, or say where it is.
+bind("CTRL + ALT + H", run("kiro-premium-hint hyprland"),          { description = "Kiro apps · KiroTux Hyprland Premium" })
+bind("CTRL + ALT + F", run("firefox"),                             { description = "Kiro apps · Firefox" })
+bind("CTRL + ALT + I", run("kiro-iso-builder"),                    { description = "Kiro apps · Kiro ISO builder" })
+bind("CTRL + ALT + L", run(logout .. " --settings"),               { description = "Kiro apps · Logout settings" })
+bind("CTRL + ALT + M", run("mintstick -m iso"),                    { description = "Kiro apps · USB image writer" })
+bind("CTRL + ALT + O", run("opera"),                               { description = "Kiro apps · Opera" })
+bind("CTRL + ALT + P", run("pamac-manager"),                       { description = "Kiro apps · Package manager" })
+bind("CTRL + ALT + V", run("vivaldi-stable"),                      { description = "Kiro apps · Vivaldi" })
+bind("CTRL + ALT + W", run("fastfetch-tweak-tool"),                { description = "Kiro apps · Fastfetch tweak tool" })
+bind("CTRL + ALT + Z", run("fastfetch-tweak-tool"),                { description = "Kiro apps · Fastfetch tweak tool, from CTRL + ALT + Z" })
+
+-- · function keys
+bind(mainMod .. " + F1",  run(apps.browser),      { description = "Kiro apps · Browser, from SUPER + F1" })
+bind(mainMod .. " + F2",  run(apps.editor),       { description = "Kiro apps · Code editor, from SUPER + F2" })
+bind(mainMod .. " + F3",  run("inkscape"),        { description = "Kiro apps · Inkscape" })
+bind(mainMod .. " + F4",  run("gimp"),            { description = "Kiro apps · GIMP" })
+bind(mainMod .. " + F5",  run("meld"),            { description = "Kiro apps · Meld" })
+bind(mainMod .. " + F6",  run("vlc"),             { description = "Kiro apps · VLC" })
+bind(mainMod .. " + F7",  run("virtualbox"),      { description = "Kiro apps · VirtualBox" })
+bind(mainMod .. " + F8",  run(apps.file_manager), { description = "Kiro apps · File manager, from SUPER + F8" })
+bind(mainMod .. " + F9",  run("virt-manager"),    { description = "Kiro apps · Virt-manager" })
+bind(mainMod .. " + F10", run("spotify"),         { description = "Kiro apps · Spotify, from SUPER + F10" })
+
+-- · shell, from Kiro's chords
+bind(mainMod .. " + D",            hl.dsp.global("quickshell:launcher"),   { description = "Shell · Open the launcher, from SUPER + D" })
+bind(mainMod .. " + CTRL + Return", hl.dsp.global("quickshell:launcher"),  { description = "Shell · Open the launcher, from SUPER + CTRL + Return" })
+bind(mainMod .. " + F11",          hl.dsp.global("quickshell:launcher"),   { description = "Shell · Open the launcher, from SUPER + F11" })
+bind(mainMod .. " + F12",          hl.dsp.global("quickshell:launcher"),   { description = "Shell · Open the launcher, from SUPER + F12" })
+bind(mainMod .. " + SHIFT + N",    hl.dsp.global("quickshell:controls"),   { description = "Shell · Open the control centre, from SUPER + SHIFT + N" })
+bind(mainMod .. " + SHIFT + W",    hl.dsp.global("quickshell:appearance"), { description = "Shell · Open appearance, from SUPER + SHIFT + W" })
+
+-- · session
+bind(mainMod .. " + X",          run(logout), { description = "Session · Logout menu" })
+bind(mainMod .. " + SHIFT + X",  run(logout), { description = "Session · Logout menu, from SUPER + SHIFT + X" })
+bind("CTRL + ALT + K",           run(logout), { description = "Session · Logout menu, from CTRL + ALT + K" })
+bind(mainMod .. " + CTRL + L",   hl.dsp.global("quickshell:lock"), { description = "Session · Lock the screen, from SUPER + CTRL + L" })
+bind("CTRL + ALT + R",           hl.dsp.global("quickshell:lock"), { description = "Session · Lock the screen, from CTRL + ALT + R" })
+bind(mainMod .. " + SHIFT + Q",  hl.dsp.window.close(), { description = "Windows · Close the focused window, from SUPER + SHIFT + Q" })
+bind(mainMod .. " + Escape",     run("hyprctl kill"),   { description = "Session · Click a window to kill it" })
+bind(mainMod .. " + CTRL + S",   run(keybindings),      { description = "Session · Show the Kiro keybindings" })
+bind(mainMod .. " + SHIFT + R",  run("hyprctl reload"), { description = "Session · Reload Hyprland" })
+
+-- · windows: groups, master, vim-style focus and resize, scratchpad
+bind(mainMod .. " + G",            hl.dsp.group.toggle(),                         { description = "Windows · Toggle a group" })
+bind(mainMod .. " + CTRL + left",  hl.dsp.window.move({ into_or_create_group = "l" }), { description = "Windows · Into the group left" })
+bind(mainMod .. " + CTRL + right", hl.dsp.window.move({ into_or_create_group = "r" }), { description = "Windows · Into the group right" })
+bind(mainMod .. " + CTRL + up",    hl.dsp.window.move({ into_or_create_group = "u" }), { description = "Windows · Into the group up" })
+bind(mainMod .. " + CTRL + down",  hl.dsp.window.move({ into_or_create_group = "d" }), { description = "Windows · Into the group down" })
+bind(mainMod .. " + I",            hl.dsp.layout("addmaster"),                    { description = "Windows · Add a master" })
+bind(mainMod .. " + SHIFT + I",    hl.dsp.layout("removemaster"),                 { description = "Windows · Remove a master" })
+bind(mainMod .. " + H",            hl.dsp.focus({ direction = "l" }),             { description = "Windows · Focus the window left, from SUPER + H" })
+bind(mainMod .. " + L",            hl.dsp.focus({ direction = "r" }),             { description = "Windows · Focus the window right, from SUPER + L" })
+bind(mainMod .. " + K",            hl.dsp.focus({ direction = "u" }),             { description = "Windows · Focus the window up, from SUPER + K" })
+bind(mainMod .. " + SHIFT + H",    hl.dsp.window.resize({ x = -50, y = 0,  relative = true }), { description = "Windows · Narrower" })
+bind(mainMod .. " + SHIFT + L",    hl.dsp.window.resize({ x = 50,  y = 0,  relative = true }), { description = "Windows · Wider" })
+bind(mainMod .. " + SHIFT + K",    hl.dsp.window.resize({ x = 0,   y = -50, relative = true }), { description = "Windows · Shorter" })
+bind(mainMod .. " + SHIFT + J",    hl.dsp.window.resize({ x = 0,   y = 50,  relative = true }), { description = "Windows · Taller" })
+bind(mainMod .. " + U",            hl.dsp.workspace.toggle_special("scratchpad"), { description = "Windows · Show or hide the scratchpad" })
+bind(mainMod .. " + SHIFT + U",    hl.dsp.window.move({ workspace = "special:scratchpad", follow = false }), { description = "Windows · Send the window to the scratchpad" })
+
+-- · workspaces, one by one
+bind(mainMod .. " + period",      hl.dsp.focus({ workspace = "e+1" }), { description = "Workspaces · Next workspace, from SUPER + period" })
+bind(mainMod .. " + comma",       hl.dsp.focus({ workspace = "e-1" }), { description = "Workspaces · Previous workspace, from SUPER + comma" })
+bind(mainMod .. " + TAB",         hl.dsp.focus({ workspace = "e+1" }), { description = "Workspaces · Next workspace, from SUPER + TAB" })
+bind(mainMod .. " + SHIFT + TAB", hl.dsp.focus({ workspace = "e-1" }), { description = "Workspaces · Previous workspace, from SUPER + SHIFT + TAB" })
+
+-- · volume in small steps
+bind("ALT + XF86AudioRaiseVolume", run("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 1%+"), { locked = true, repeating = true, description = "Media · Volume up 1%" })
+bind("ALT + XF86AudioLowerVolume", run("wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%-"),      { locked = true, repeating = true, description = "Media · Volume down 1%" })
+
+-- · Variety; set_wallpaper_kiro hands each wallpaper to impasto, so the palette follows it
+bind("ALT + N",         run("variety --next"),     { description = "Wallpaper · Next" })
+bind("ALT + Right",     run("variety --next"),     { description = "Wallpaper · Next, from ALT + Right" })
+bind("ALT + SHIFT + N", run("variety --next"),     { description = "Wallpaper · Next, from ALT + SHIFT + N" })
+bind("ALT + P",         run("variety --previous"), { description = "Wallpaper · Previous" })
+bind("ALT + Left",      run("variety --previous"), { description = "Wallpaper · Previous, from ALT + Left" })
+bind("ALT + SHIFT + P", run("variety --previous"), { description = "Wallpaper · Previous, from ALT + SHIFT + P" })
+bind("ALT + T",         run("variety --trash"),    { description = "Wallpaper · Trash" })
+bind("ALT + SHIFT + T", run("variety --trash"),    { description = "Wallpaper · Trash, from ALT + SHIFT + T" })
+bind("ALT + F",         run("variety --favorite"), { description = "Wallpaper · Favourite" })
+bind("ALT + SHIFT + F", run("variety --favorite"), { description = "Wallpaper · Favourite, from ALT + SHIFT + F" })
+bind("ALT + Up",        run("variety --pause"),    { description = "Wallpaper · Pause" })
+bind("ALT + Down",      run("variety --resume"),   { description = "Wallpaper · Resume" })
+bind("ALT + W",         run("variety --selector"), { description = "Wallpaper · Selector" })
+
+-- · screenshots (kiro-screenshot, from kiro-wayland-dotfiles): a PNG in ~/Pictures/Screenshots,
+-- · the clipboard and a notification. impasto's capture surface is on SHIFT + Print.
+bind("Print",                   run("kiro-screenshot region"), { description = "Utilities · Screenshot a region" })
+bind(mainMod .. " + Print",     run("kiro-screenshot screen"), { description = "Utilities · Screenshot the screen" })
 
 
 -- ── LID ─────────────────────────────────────────────────────────────────────

@@ -7,13 +7,34 @@
 -- │                                                                          │
 -- ╰──────────────────────────────────────────────────────────────────────────╯
 
+-- Kiro: the layout picked in the installer (Calamares writes XKBLAYOUT / XKBVARIANT to
+-- /etc/vconsole.conf), else us,be. KiroTux Hyprland Premium can override it in appearance.lua.
+-- Both Ctrl keys switch layouts (Alt+Shift stays free for the wallpaper keys); Caps is Compose.
+local function installer_keyboard(fallback)
+    local file = io.open("/etc/vconsole.conf")
+    if not file then return fallback, "" end
+    local layout, variant
+    for line in file:lines() do
+        layout  = layout  or line:match('^XKBLAYOUT="?([^"]*)"?$')
+        variant = variant or line:match('^XKBVARIANT="?([^"]*)"?$')
+    end
+    file:close()
+    if not layout or layout == "" then return fallback, "" end
+    return layout, variant or ""
+end
+
+local kb_layout, kb_variant = installer_keyboard("us,be")
+
 hl.config({
     input = {
-        kb_layout  = "us",
-        kb_variant = "",
+        kb_layout  = kb_layout,
+        kb_variant = kb_variant,
         kb_model   = "",
-        kb_options = "",
+        kb_options = "grp:ctrls_toggle,compose:caps",
         kb_rules   = "",
+
+        -- Kiro: binds follow the active layout (us and be alike).
+        resolve_binds_by_sym = true,
 
         follow_mouse = 1,
         sensitivity  = 0,  -- range -1.0 to 1.0; 0 means unmodified
