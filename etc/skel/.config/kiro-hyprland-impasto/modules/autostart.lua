@@ -16,23 +16,18 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("awww-daemon")  -- · wallpaper
 end)
 
--- · plugins (see input.lua, look.lua), built by `./setup plugins`
+-- · Kiro session start (as the other Kiro Hyprland editions)
 --
--- Only reload once something is built: otherwise hyprpm shows a headers
--- notification on every login. Its store is per user under /var/cache.
---
--- A terminal on `./setup plugins`, which asks for the password hyprpm needs,
--- when an install run outside the session left them to this one, or when
--- they no longer load because Hyprland was updated under them. `hyprpm
--- reload` reports success either way; the plugin list is what says.
-local apps = require("modules.programs")
+-- hl.exec_cmd execs argv directly, without a shell: anything with a test, `&&`
+-- or `$VAR` is wrapped in `sh -c`.
 hl.on("hyprland.start", function()
-    hl.exec_cmd('s="${XDG_STATE_HOME:-$HOME/.local/state}/impasto"; '
-        .. 'if test -f "$s/plugins-pending"; then r=$(cat "$s/plugins-pending"); '
-        .. 'elif test -d "/var/cache/hyprpm/$USER" && { hyprpm reload; '
-        .. 'hyprctl plugin list | grep -q "^no plugins loaded" && hyprpm list | grep -q true; }; then r=$(sed -n 3p "$s/version"); '
-        .. 'else exit 0; fi; '
-        .. 'test -x "$r/setup" && ' .. apps.terminal .. ' --hold "$r/setup" plugins')
+    hl.exec_cmd("dbus-update-activation-environment --systemd --all")
+    hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP QS_CONFIG_PATH")
+    hl.exec_cmd("xdg-user-dirs-update")
+    hl.exec_cmd("~/.config/kiro-hyprland-impasto/scripts/import-gsettings.sh")
+    hl.exec_cmd("variety")
+    -- Live ISO only: start the installer. kiro_final strips this line on install.
+    hl.exec_cmd("sh -c '[ -d /run/archiso/bootmnt ] && calamares_polkit -d -style kvantum'")
 end)
 
 -- · polkit agent
