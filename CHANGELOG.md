@@ -8,6 +8,11 @@
 - Kiro default apps, the Kiro wallpaper and one Kiro profile; no `./setup`, no upstream wallpapers, no `system/`
   layer, no hyprpm.
 - The GTK, KDE and Qt colours follow the wallpaper only inside this session.
+- Keys: the Kiro scheme of the other Hyprland editions, with impasto's panels on Super + Alt. Every key can still be
+  changed in impasto's Settings → Keys. `keybindings.txt` lists them for `kiro-keybindings` (Super + Ctrl + S).
+- The keyboard layout comes from the installer (fallback us,be). Both Ctrl keys switch layout, Caps is Compose, and
+  binds follow the active layout.
+- Alacritty follows the wallpaper's colours too. Kiro's terminal opacity rules apply.
 
 ### Technical Details
 - The first commit is the pristine v0.6.0 import. Every Kiro change is its own commit on top, so
@@ -20,6 +25,11 @@
   `hl.plugin.* ~= nil` guards keep the config valid without them.
 - `ruff.toml` and `.codespellrc` skip the vendored shell tree; patched upstream files are checked to add no ruff
   findings.
+- A fresh install takes the first profile, and its `settings.keys` override `keybinds.lua`. `1-kiro.json` is
+  therefore generated from `keybinds.lua`: a Lua harness runs the module against a mocked `hl` and lists every bind
+  (197 binds, no duplicate chord or description). `keybindings.txt` comes from the same list.
+- `theme_manager.py` also writes the terminal palette as `~/.config/alacritty/impasto-theme.toml`;
+  `scripts/alacritty-colours.sh` gives a user without an `alacritty.toml` a one-line import of it.
 
 ### Files Modified
 - All files (new repo).
