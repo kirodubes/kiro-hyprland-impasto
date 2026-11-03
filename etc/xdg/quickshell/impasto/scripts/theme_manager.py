@@ -4085,9 +4085,13 @@ def main():
         write_yazi_flavor(colors)
         push_nvim_colorscheme(colors)
         write_imv_config(colors)
-        write_gtk_theme(colors)
+        # Kiro: gtk.css, kdeglobals and qt6ct are shared with every other session on
+        # the machine (XFCE, Plasma, the other Hyprland editions); only push into them
+        # from the Kiro Hyprland Impasto session itself.
+        if os.environ.get("DESKTOP_SESSION", "").endswith("kiro-hyprland-impasto"):
+            write_gtk_theme(colors)
+            write_qt_theme(colors)
         write_icon_theme(colors)
-        write_qt_theme(colors)
         write_vesktop_css(colors)
         write_spicetify_colors(colors)
         write_vscodium_theme(colors)
