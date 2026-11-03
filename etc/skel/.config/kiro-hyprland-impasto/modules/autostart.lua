@@ -25,6 +25,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP QS_CONFIG_PATH")
     hl.exec_cmd("xdg-user-dirs-update")
     hl.exec_cmd("~/.config/kiro-hyprland-impasto/scripts/import-gsettings.sh")
+    hl.exec_cmd("~/.config/kiro-hyprland-impasto/scripts/alacritty-colours.sh")
     hl.exec_cmd("variety")
     -- Live ISO only: start the installer. kiro_final strips this line on install.
     hl.exec_cmd("sh -c '[ -d /run/archiso/bootmnt ] && calamares_polkit -d -style kvantum'")
