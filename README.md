@@ -44,7 +44,8 @@ Optional extras: `hypr-dynamic-cursors` (shake the pointer to find it), `hyprgla
 - Kiro's wallpaper instead of upstream's pictures.
 - No `./setup` and no system files. Upstream's own login screen, boot splash and face unlock are not included.
 - The shell is installed system-wide, so package updates reach every user.
-- The GTK, KDE and Qt colours follow the wallpaper only in this session, so your other desktops keep their look.
+- Wallpaper colours are applied to GTK apps (Thunar included) and Qt apps too. That's meant for the KiroTux ISO,
+  where this is the only desktop. If you install it next to XFCE or Plasma, those desktops see the colours as well.
 - The two Hyprland plugins come as packages instead of being built with `hyprpm`.
 
 The full list is in [CLAUDE.md](CLAUDE.md).

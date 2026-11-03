@@ -12,8 +12,9 @@ Decisions and scope check are in the internal `Kiro-HQ/Kirotux/KIROTUX-HYPRLAND-
 - **Compositor:** Hyprland 0.56+ (Lua config). 0.57 checked with `Hyprland --verify-config`.
 - **Config:** impasto's modular Lua, kept modular: `etc/skel/.config/kiro-hyprland-impasto/hyprland.lua` requires
   `modules/*.lua`. The session wrapper starts Hyprland with `--config` on it (never `~/.config/hypr/`).
-- **Shell:** impasto in `/etc/xdg/quickshell/impasto` (system-wide, read-only). `modules/env.lua` sets
-  `QS_CONFIG_PATH` to it, so every bare `qs` in the session finds it. The shell is the bar, launcher, lock (PAM
+- **Shell:** impasto in `/etc/xdg/quickshell/impasto` (system-wide, read-only), started and reached with
+  `qs -p /etc/xdg/quickshell/impasto` (autostart, restart bind, `usr/bin/impasto`). Never set `QS_CONFIG_PATH`: it
+  leaks into the systemd user env and would hijack a DMS session's `qs`. The shell is the bar, launcher, lock (PAM
   `login`), notifications and polkit agent. Its state lives in `~/.local/state/quickshell`, and its profiles live in
   `~/.local/share/impasto`.
 - **Wallpaper:** awww, driven by the shell. Variety (autostarted) calls `impasto wallpaper set <file>` through
@@ -38,12 +39,13 @@ Decisions and scope check are in the internal `Kiro-HQ/Kirotux/KIROTUX-HYPRLAND-
   in the public history.
 
 ### Kiro patches (grep anchors)
-1. `scripts/theme_manager.py`, `push-terminal-palette` branch: `write_gtk_theme` + `write_qt_theme` run only when
-   `DESKTOP_SESSION` ends in `kiro-hyprland-impasto` (those files are shared with every other session).
+1. `scripts/theme_manager.py`: `write_alacritty_palette()`, called from `push_terminal_palette()`. The GTK/KDE/Qt
+   pushes are upstream's, unchanged: on the KiroTux ISO this is the only desktop.
 2. `./setup` hints reworded in `CameraPanel.qml`, `MachinesPanel.qml`, `InputSection.qml`, `WindowsSection.qml`,
    `SessionSection.qml`, together with their keys in `theme/Tr.qml` (English key + Spanish value).
-3. `hypr/modules/programs.lua`, `env.lua` (`QS_CONFIG_PATH`, Kiro env, no impasto-cursor), `autostart.lua` (no
-   hyprpm block), `hyprland.lua` (plugin loads, `appearance.lua` last).
+3. `hypr/modules/programs.lua`, `env.lua` (Kiro env, no impasto-cursor), `input.lua` (installer keyboard),
+   `autostart.lua` (`qs -p`, no hyprpm block, Kiro start), `keybinds.lua` (Kiro scheme), `windowrules.lua`,
+   `hyprland.lua` (plugin loads, `appearance.lua` last); `usr/bin/impasto` (`qs ipc -p`).
 4. Profiles: upstream's three replaced by `1-kiro.json` (the Kiro wallpaper). A fresh install takes the first
    profile. **Its `settings.keys` are the real default keybinds**, not `keybinds.lua`'s fallbacks.
 

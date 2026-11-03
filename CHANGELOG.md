@@ -7,7 +7,9 @@
   GPL-3.0), in its own `~/.config/kiro-hyprland-impasto/` folder and its own "Kiro Hyprland Impasto" session.
 - Kiro default apps, the Kiro wallpaper and one Kiro profile; no `./setup`, no upstream wallpapers, no `system/`
   layer, no hyprpm.
-- The GTK, KDE and Qt colours follow the wallpaper only inside this session.
+- GTK apps (Thunar) and Qt apps follow the wallpaper's palette, as upstream does. On the KiroTux ISO this is the
+  only desktop (a session gate was tried and reverted: impasto only runs in its own session, and gtk.css stays on
+  disk after logout, so a gate protects nothing).
 - Keys: the Kiro scheme of the other Hyprland editions, with impasto's panels on Super + Alt. Every key can still be
   changed in impasto's Settings → Keys. `keybindings.txt` lists them for `kiro-keybindings` (Super + Ctrl + S).
 - The keyboard layout comes from the installer (fallback us,be). Both Ctrl keys switch layout, Caps is Compose, and
@@ -17,10 +19,9 @@
 ### Technical Details
 - The first commit is the pristine v0.6.0 import. Every Kiro change is its own commit on top, so
   `git diff 103ab24..HEAD -- etc/xdg etc/skel usr/bin/impasto` is the patch set to re-apply on an upstream bump.
-- The shell lives in `/etc/xdg/quickshell/impasto`. `QS_CONFIG_PATH` is set in `modules/env.lua`, so every bare
-  `qs` call in the session (the shell, `qs ipc`, the `impasto` command, Variety) reaches it without patching.
-- `theme_manager.py` writes `gtk.css`, `kdeglobals` and `qt6ct` only when `DESKTOP_SESSION` ends in
-  `kiro-hyprland-impasto`.
+- The shell lives in `/etc/xdg/quickshell/impasto`, and every `qs` call passes `-p` to it: the autostart, the
+  restart-shell bind and the `impasto` command (which Variety uses). `QS_CONFIG_PATH` was tried first and dropped,
+  because the session exports its environment to systemd and a later DMS login could inherit it.
 - Plugins load with `hl.plugin.load()` from `/usr/lib/hyprland-plugins/` when installed; upstream's
   `hl.plugin.* ~= nil` guards keep the config valid without them.
 - `ruff.toml` and `.codespellrc` skip the vendored shell tree; patched upstream files are checked to add no ruff
