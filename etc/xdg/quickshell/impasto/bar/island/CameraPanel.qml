@@ -204,7 +204,7 @@ ColumnLayout {
                     : !CameraService.ready
                       ? (CameraService.missing.indexOf("camera") >= 0
                          ? Tr.t("No camera is plugged in.")
-                         : Tr.t("Run ./setup camera once to set the virtual camera up."))
+                         : Tr.t("The virtual camera is not part of Kiro Hyprland Impasto."))
                     : !CameraService.enabled ? Tr.t("The virtual camera is off.")
                     : CameraService.state === "error" ? Tr.t("The camera could not be opened. Another program may be holding it.")
                     : Tr.t("Waking the camera")

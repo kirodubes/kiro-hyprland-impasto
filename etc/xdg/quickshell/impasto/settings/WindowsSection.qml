@@ -156,7 +156,7 @@ SettingsSection {
         SettingRow {
             label: Tr.t("Refraction")
             locked: !CompositorService.glassAvailable
-            reason: Tr.t("Needs the refraction plugin — run ./setup plugins")
+            reason: Tr.t("Needs the refraction plugin (hyprglass package)")
 
             ToggleSwitch {
                 checked: SettingsService.windowGlass

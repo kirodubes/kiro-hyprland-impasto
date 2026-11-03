@@ -295,7 +295,7 @@ ColumnLayout {
             width: parent.width * 0.7
             horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.WordWrap
-            text: Tr.t("Machines need quickemu, which ./setup packages installs.")
+            text: Tr.t("Machines need quickemu, which is not installed.")
             font.family: Theme.fontFamily
             font.pixelSize: Theme.fontSizeRegular
             color: Theme.textMuted

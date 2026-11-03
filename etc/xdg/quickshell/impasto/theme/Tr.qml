@@ -468,7 +468,7 @@ QtObject {
             "core": "núcleo",
             "Find a system…": "Busca un sistema…",
             "New": "Nueva",
-            "Machines need quickemu, which ./setup packages installs.": "Las máquinas necesitan quickemu, que instala ./setup packages.",
+            "Machines need quickemu, which is not installed.": "Las máquinas necesitan quickemu, que no está instalado.",
             "No machines yet. Pick a system in New.": "Aún no hay máquinas. Elige un sistema en Nueva.",
             "Downloading": "Descargando",
             "snapshots": "instantáneas",
@@ -541,7 +541,7 @@ QtObject {
             "in any call": "en cualquier llamada",
             "Virtual camera": "Cámara virtual",
             "No camera is plugged in.": "No hay ninguna cámara conectada.",
-            "Run ./setup camera once to set the virtual camera up.": "Ejecuta ./setup camera una vez para preparar la cámara virtual.",
+            "The virtual camera is not part of Kiro Hyprland Impasto.": "La cámara virtual no forma parte de Kiro Hyprland Impasto.",
             "The virtual camera is off.": "La cámara virtual está apagada.",
             "The camera could not be opened. Another program may be holding it.": "No se pudo abrir la cámara. Puede que otro programa la esté usando.",
             "Waking the camera": "Despertando la cámara",
@@ -725,8 +725,8 @@ QtObject {
             "Terminal": "Terminal",
             "size": "tamaño",
             "Glass": "Cristal",
-            "Needs the refraction plugin — run ./setup plugins":
-                "Necesita el plugin de refracción — ejecuta ./setup plugins",
+            "Needs the refraction plugin (hyprglass package)":
+                "Necesita el plugin de refracción (paquete hyprglass)",
             "Shadow": "Sombra",
             "Lifted off the wallpaper": "Despegadas del fondo",
             "Flat": "Planas",
@@ -864,14 +864,14 @@ QtObject {
             "The cursor": "El cursor",
             "One vector shape, sharp at any size — Palette follows the wallpaper.":
                 "Una forma vectorial, nítida a cualquier tamaño — Paleta sigue al fondo.",
-            "Colour and size are applied with hyprctl setcursor, so every application updates at once and Palette follows wallpaper changes. Shake to find briefly enlarges the pointer when you shake the mouse; it needs the hypr-dynamic-cursors plugin (./setup plugins).":
-                "El color y el tamaño se aplican con hyprctl setcursor, así que todas las aplicaciones cambian a la vez y Paleta sigue los cambios de fondo. Agitar para encontrar agranda el puntero un momento al agitar el ratón; necesita el plugin hypr-dynamic-cursors (./setup plugins).",
+            "Colour and size are applied with hyprctl setcursor, so every application updates at once and Palette follows wallpaper changes. Shake to find briefly enlarges the pointer when you shake the mouse; it needs the hypr-dynamic-cursors plugin package.":
+                "El color y el tamaño se aplican con hyprctl setcursor, así que todas las aplicaciones cambian a la vez y Paleta sigue los cambios de fondo. Agitar para encontrar agranda el puntero un momento al agitar el ratón; necesita el paquete del plugin hypr-dynamic-cursors.",
             "Cursor colour": "Color del cursor",
             "Cursor size": "Tamaño del cursor",
             "24 px — the default": "24 px — el valor por defecto",
             "Shake to find": "Agitar para encontrar",
-            "Needs the cursor plugin — run ./setup plugins":
-                "Necesita el plugin del cursor — ejecuta ./setup plugins",
+            "Needs the cursor plugin (hypr-dynamic-cursors package)":
+                "Necesita el plugin del cursor (paquete hypr-dynamic-cursors)",
             "Black": "Negro",
             "White": "Blanco",
             "Red": "Rojo",
@@ -1077,7 +1077,7 @@ QtObject {
                 "El nombre es el nombre completo de tu cuenta, y la foto se guarda, recortada en cuadrado, donde también la lee la pantalla de inicio de sesión. Haz clic en la foto o suelta una imagen en la tarjeta para cambiarla.",
             "Saving…": "Guardando…",
             "The picture was not changed": "La foto no se cambió",
-            "The lock screen only, until ./setup system": "Solo en el bloqueo, hasta ./setup system",
+            "On the lock screen": "En la pantalla de bloqueo",
             "On the lock and login screens": "En el bloqueo y en el inicio de sesión",
 
             "Only the profile in use. The others are left as they were.":
