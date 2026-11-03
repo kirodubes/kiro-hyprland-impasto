@@ -203,13 +203,3 @@ hl.window_rule({ match = { class = "^(Alacritty)$" },     opacity = "0.90 0.85" 
 hl.window_rule({ match = { class = "^(btop)$" },          opacity = "0.80 0.75" })
 hl.window_rule({ match = { class = "(Alacritty|kitty)" }, scroll_touchpad = 1.5 })
 hl.window_rule({ match = { class = "^(Spotify)$" },       tile = true })
-
--- Kiro: the installer floats, centred, so other windows never squeeze it into a tile.
-hl.window_rule({
-    name  = "calamares-float",
-    match = { class = "^(calamares)$" },
-
-    float  = true,
-    center = true,
-    size   = "monitor_w*0.85 monitor_h*0.85",
-})

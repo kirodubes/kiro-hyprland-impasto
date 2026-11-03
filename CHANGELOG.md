@@ -15,9 +15,8 @@
 - The keyboard layout comes from the installer (fallback us,be). Both Ctrl keys switch layout, Caps is Compose, and
   binds follow the active layout.
 - Alacritty follows the wallpaper's colours too. Kiro's terminal opacity rules apply.
-- The installer (Calamares) floats, centred, at 85% of the screen. Other open windows can no longer squeeze it into
-  a narrow tile. That happened on the first ISO test: three windows opened by keys tiled it into 615 pixels on a
-  1280×800 screen. Tested live on QEMU first (1088×680, centred under the bar).
+- The installer (Calamares) stays tiled, as on the other Kiro Hyprland editions. A float rule was added and taken out
+  again the same day: Erik prefers it tiled.
 
 ### Technical Details
 - The first commit is the pristine v0.6.0 import. Every Kiro change is its own commit on top, so
