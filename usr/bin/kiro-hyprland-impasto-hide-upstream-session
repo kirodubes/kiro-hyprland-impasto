@@ -1,0 +1,22 @@
+#!/bin/sh
+#####################################################################
+# Author    : Erik Dubois
+# Website   : https://kiroproject.be
+#####################################################################
+#   DO NOT JUST RUN THIS. EXAMINE AND JUDGE. RUN AT YOUR OWN RISK.
+#
+# Purpose:
+#   Hide upstream Hyprland's session entries so only Kiro's own "Kiro
+#   Hyprland Impasto" entry is offered in the display manager. Stamps
+#   NoDisplay=true onto the hyprland package's .desktop files when it is
+#   not already there.
+# Why:
+#   The Kiro edition reads ~/.config/kiro-hyprland-impasto/; upstream's entry
+#   would start Hyprland on an empty ~/.config/hypr/.
+#####################################################################
+
+for desktop in /usr/share/wayland-sessions/hyprland.desktop /usr/share/wayland-sessions/hyprland-uwsm.desktop; do
+    [ -f "$desktop" ] || continue
+    grep -q '^NoDisplay=true$' "$desktop" && continue
+    printf 'NoDisplay=true\n' >> "$desktop"
+done
