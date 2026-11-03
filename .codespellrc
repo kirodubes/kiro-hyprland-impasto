@@ -1,0 +1,3 @@
+# impasto's vendored shell carries Spanish translations (theme/Tr.qml) and identifiers codespell misreads.
+[codespell]
+skip = etc/xdg/quickshell/impasto/*,./etc/xdg/quickshell/impasto/*

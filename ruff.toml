@@ -1,0 +1,5 @@
+# The Quickshell tree is impasto's upstream code (GPL-3.0), vendored. Kiro keeps its patches small so a new upstream
+# tag can be re-applied; reformatting upstream to Kiro's lint rules would bury them. Kiro's own patched files are
+# checked by hand with `ruff check --no-force-exclude` (no new findings over upstream).
+extend-exclude = ["etc/xdg/quickshell/impasto"]
+force-exclude = true
