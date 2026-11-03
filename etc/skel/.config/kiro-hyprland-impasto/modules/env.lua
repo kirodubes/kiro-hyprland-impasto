@@ -20,11 +20,6 @@ hl.env("XCURSOR_THEME",    "Bibata-Modern-Classic")
 -- · Quickshell draws from its own Theme.qml and is unaffected.
 hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
 
--- Kiro: the shell ships system-wide as /etc/xdg/quickshell/impasto. Every bare `qs` in this
--- session (the shell itself, `qs ipc call`, the impasto command, Variety) reaches it through
--- this variable, so no other session's Quickshell config is touched.
-hl.env("QS_CONFIG_PATH", "/etc/xdg/quickshell/impasto")
-
 -- Kiro: Wayland across toolkits and the session name for the portals, as the other Kiro
 -- Hyprland editions. WLR_* keep VMs (VirtualBox/VMware/QEMU) from black-screening.
 hl.env("GDK_BACKEND",                  "wayland,x11,*")

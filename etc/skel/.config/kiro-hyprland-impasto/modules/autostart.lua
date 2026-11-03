@@ -12,7 +12,7 @@
 -- Quickshell owns org.freedesktop.Notifications, so no separate notification
 -- daemon runs: only one process can hold that bus name.
 hl.on("hyprland.start", function()
-    hl.exec_cmd("qs -d")        -- · bar and notifications (quickshell)
+    hl.exec_cmd("qs -p /etc/xdg/quickshell/impasto -d")  -- · bar and notifications (Kiro: the shell ships in /etc/xdg)
     hl.exec_cmd("awww-daemon")  -- · wallpaper
 end)
 
@@ -22,7 +22,7 @@ end)
 -- or `$VAR` is wrapped in `sh -c`.
 hl.on("hyprland.start", function()
     hl.exec_cmd("dbus-update-activation-environment --systemd --all")
-    hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP QS_CONFIG_PATH")
+    hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
     hl.exec_cmd("xdg-user-dirs-update")
     hl.exec_cmd("~/.config/kiro-hyprland-impasto/scripts/import-gsettings.sh")
     hl.exec_cmd("~/.config/kiro-hyprland-impasto/scripts/alacritty-colours.sh")
