@@ -82,8 +82,9 @@
     "dockEdge": "bottom",
     "dockAutohide": true,
     "dockPinned": [
-      "kitty.desktop",
-      "org.gnome.Nautilus.desktop"
+      "Alacritty.desktop",
+      "thunar.desktop",
+      "firefox.desktop"
     ],
     "greeting": "lava",
     "wallpaperTransition": "fade",

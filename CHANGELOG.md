@@ -6,6 +6,8 @@
 - Screens default to 100% scale. A screen saved in impasto's Settings → Displays without a scale used to fall back
   to Hyprland's automatic scale (300% in a QEMU VM). A scale picked in Settings still wins. Applies to existing
   users too, on the next package update.
+- The dock pins Alacritty, Thunar and Firefox. It pinned kitty and Nautilus (upstream's apps), which the edition
+  doesn't ship. New installs only: existing users keep their own dock pins.
 
 ### Technical Details
 - `scripts/monitors.py` `rule_chunk()` adds `scale = 1` to any lit rule that has no `scale`; `hl.monitor{}` without
@@ -13,6 +15,7 @@
 
 ### Files Modified
 - etc/xdg/quickshell/impasto/scripts/monitors.py
+- etc/skel/.local/share/impasto/profiles/1-kiro.json
 - CLAUDE.md
 
 ## 2026.11.03
