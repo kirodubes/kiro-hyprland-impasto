@@ -41,7 +41,8 @@ Optional extras: `hypr-dynamic-cursors` (shake the pointer to find it), `hyprgla
 ## What Kiro changes
 
 - Kiro's default apps: alacritty, Thunar, Firefox, Sublime Text.
-- Kiro's wallpaper instead of upstream's pictures.
+- Kiro's wallpapers instead of upstream's pictures: the default is `kiro-impasto.jpg`, the Kiro valley repainted in
+  thick impasto strokes; the flat original `kiro.jpg` is there too. Both are in `~/.local/share/wallpapers`.
 - No `./setup` and no system files. Upstream's own login screen, boot splash and face unlock are not included.
 - The shell is installed system-wide, so package updates reach every user.
 - Wallpaper colours are applied to GTK apps (Thunar included) and Qt apps too. That's meant for the KiroTux ISO,

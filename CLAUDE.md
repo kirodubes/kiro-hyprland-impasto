@@ -50,7 +50,9 @@ Decisions and scope check are in the internal `Kiro-HQ/Kirotux/KIROTUX-HYPRLAND-
 3. `hypr/modules/programs.lua`, `env.lua` (Kiro env, no impasto-cursor), `input.lua` (installer keyboard),
    `autostart.lua` (`qs -p`, no hyprpm block, Kiro start), `keybinds.lua` (Kiro scheme), `windowrules.lua`,
    `hyprland.lua` (plugin loads with the dynamic-cursors commit guard, `appearance.lua` last); `usr/bin/impasto` (`qs ipc -p`).
-4. Profiles: upstream's three replaced by `1-kiro.json` (the Kiro wallpaper). A fresh install takes the first
+4. Profiles: upstream's three replaced by `1-kiro.json` (wallpaper `bg/kiro-impasto.jpg`, the Kiro valley painted
+   with SDXL from Kiro's own `kiro.jpg`; Kiro-HQ `COMFYUI/impasto.py`, seed 2026, strength 0.70). New wallpapers
+   must come from our own images or a text-only `--scene`, never from a downloaded picture. A fresh install takes the first
    profile. **Its `settings.keys` are the real default keybinds**, not `keybinds.lua`'s fallbacks.
 5. `scripts/monitors.py` `rule_chunk()`: a lit screen saved without a scale gets `scale = 1` (otherwise Hyprland
    uses `auto` and overrides `modules/monitors.lua`).

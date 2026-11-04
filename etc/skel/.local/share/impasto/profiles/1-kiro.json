@@ -1,7 +1,7 @@
 {
   "impasto": 1,
   "name": "Kiro",
-  "wallpaper": "~/.config/kiro-hyprland-impasto/bg/kiro.jpg",
+  "wallpaper": "~/.config/kiro-hyprland-impasto/bg/kiro-impasto.jpg",
   "palette": "adaptive",
   "settings": {
     "barStyle": "island",
