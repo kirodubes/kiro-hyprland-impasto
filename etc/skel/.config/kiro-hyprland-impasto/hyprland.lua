@@ -15,14 +15,40 @@
 
 -- Kiro: the two plugins come as packages (no hyprpm). Loaded only when installed;
 -- Hyprland parses the config again once a plugin is in, and input.lua and look.lua
--- configure them on that pass. A plugin built for another Hyprland is refused and
--- the session runs without it.
-for _, plugin in ipairs({ "/usr/lib/hyprland-plugins/dynamic-cursors.so",
-                          "/usr/lib/hyprland-plugins/hyprglass.so" }) do
-    local file = io.open(plugin)
+-- configure them on that pass.
+-- A plugin only loads on the exact Hyprland commit it was built against. Right after a
+-- Hyprland update, until the plugin packages are rebuilt, loading one shows a "failed to
+-- load" banner; so a strict plugin is loaded only when its file holds the running commit,
+-- and is skipped quietly otherwise. hyprglass is not strict: its own load guard accepts a
+-- Hyprland whose API still fits (it loaded fine on 0.57.1 while built for 0.57.0). The
+-- instance signature starts with the running commit; version.h is the fallback.
+local function running_commit()
+    local commit = (os.getenv("HYPRLAND_INSTANCE_SIGNATURE") or ""):match("^(%x+)_")
+    if commit and #commit == 40 then
+        return commit
+    end
+    local header = io.open("/usr/include/hyprland/src/version.h")
+    if not header then
+        return nil
+    end
+    local text = header:read("a")
+    header:close()
+    return text:match('GIT_COMMIT_HASH%s+"(%x+)"')
+end
+
+local commit = running_commit()
+for _, entry in ipairs({ { "/usr/lib/hyprland-plugins/dynamic-cursors.so", true },
+                         { "/usr/lib/hyprland-plugins/hyprglass.so", false } }) do
+    local plugin, strict = entry[1], entry[2]
+    local file = io.open(plugin, "rb")
     if file then
+        local data = strict and commit and file:read("a") or ""
         file:close()
-        hl.plugin.load(plugin)
+        if not strict or not commit or data:find(commit, 1, true) then
+            hl.plugin.load(plugin)
+        else
+            print("skipped " .. plugin .. ": built for another Hyprland, rebuild pending")
+        end
     end
 end
 

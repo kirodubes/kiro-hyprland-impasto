@@ -45,7 +45,7 @@ Decisions and scope check are in the internal `Kiro-HQ/Kirotux/KIROTUX-HYPRLAND-
    `SessionSection.qml`, together with their keys in `theme/Tr.qml` (English key + Spanish value).
 3. `hypr/modules/programs.lua`, `env.lua` (Kiro env, no impasto-cursor), `input.lua` (installer keyboard),
    `autostart.lua` (`qs -p`, no hyprpm block, Kiro start), `keybinds.lua` (Kiro scheme), `windowrules.lua`,
-   `hyprland.lua` (plugin loads, `appearance.lua` last); `usr/bin/impasto` (`qs ipc -p`).
+   `hyprland.lua` (plugin loads with the dynamic-cursors commit guard, `appearance.lua` last); `usr/bin/impasto` (`qs ipc -p`).
 4. Profiles: upstream's three replaced by `1-kiro.json` (the Kiro wallpaper). A fresh install takes the first
    profile. **Its `settings.keys` are the real default keybinds**, not `keybinds.lua`'s fallbacks.
 5. `scripts/monitors.py` `rule_chunk()`: a lit screen saved without a scale gets `scale = 1` (otherwise Hyprland

@@ -8,14 +8,22 @@
   users too, on the next package update.
 - The dock pins Alacritty, Thunar and Firefox. It pinned kitty and Nautilus (upstream's apps), which the edition
   doesn't ship. New installs only: existing users keep their own dock pins.
+- No more "dynamic cursors failed to load" banner right after a Hyprland update. Until the plugin package is
+  rebuilt for the new Hyprland, the session starts without shake-to-find; it comes back with the rebuild. New
+  installs, and existing users after `kiro-skell` (the change is in `hyprland.lua`).
 
 ### Technical Details
 - `scripts/monitors.py` `rule_chunk()` adds `scale = 1` to any lit rule that has no `scale`; `hl.monitor{}` without
   one means `auto`, which overrode `modules/monitors.lua`. Listed as Kiro patch 5 in CLAUDE.md.
+- `hyprland.lua` loads dynamic-cursors only when its `.so` contains the running Hyprland commit (the instance
+  signature's prefix, with `/usr/include/hyprland/src/version.h` as fallback); otherwise it prints a skip line.
+  hyprglass is always loaded: its own load guard accepted 0.57.1 while it was built for 0.57.0. Tested on a test box
+  with `hyprctl reload`: no config errors, hyprglass in, dynamic-cursors skipped.
 
 ### Files Modified
 - etc/xdg/quickshell/impasto/scripts/monitors.py
 - etc/skel/.local/share/impasto/profiles/1-kiro.json
+- etc/skel/.config/kiro-hyprland-impasto/hyprland.lua
 - CLAUDE.md
 
 ## 2026.11.03
