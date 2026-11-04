@@ -32,6 +32,7 @@ hl.config({
         kb_model   = "",
         kb_options = "grp:ctrls_toggle,compose:caps",
         kb_rules   = "",
+        numlock_by_default = true,
 
         -- Kiro: binds follow the active layout (us and be alike).
         resolve_binds_by_sym = true,

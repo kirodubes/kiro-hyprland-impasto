@@ -14,6 +14,8 @@
 - New default wallpaper `kiro-impasto.jpg`: the Kiro valley repainted as a thick impasto oil painting, to match
   the edition's name. The flat original `kiro.jpg` stays in the wallpapers folder. New installs only: existing
   users keep the wallpaper they have.
+- Num Lock is on when the session starts. The login screen turned it on, but Hyprland switched it back off. New
+  installs, and existing users after `kiro-skell` (the change is in `modules/input.lua`).
 
 ### Technical Details
 - `scripts/monitors.py` `rule_chunk()` adds `scale = 1` to any lit rule that has no `scale`; `hl.monitor{}` without
@@ -27,11 +29,14 @@
 - `kiro-impasto.jpg` was made from Kiro's own `kiro.jpg` with ComfyUI on a test box (SDXL base img2img, strength
   0.70, seed 2026, RealESRGAN x4 to 3840x2160, JPEG q90), so it carries no third-party artwork. It sits in `bg/`
   next to `kiro.jpg`, with the same relative symlink in `~/.local/share/wallpapers`, and `1-kiro.json` points to it.
+- `modules/input.lua` sets `numlock_by_default = true`, as `kiro-hyprland-dms` does. impasto's Settings never
+  writes that key, so nothing overrides it.
 
 ### Files Modified
 - etc/xdg/quickshell/impasto/scripts/monitors.py
 - etc/skel/.local/share/impasto/profiles/1-kiro.json
 - etc/skel/.config/kiro-hyprland-impasto/hyprland.lua
+- etc/skel/.config/kiro-hyprland-impasto/modules/input.lua
 - etc/skel/.config/kiro-hyprland-impasto/bg/kiro-impasto.jpg (new)
 - etc/skel/.local/share/wallpapers/kiro-impasto.jpg (new symlink)
 - README.md
