@@ -35,6 +35,10 @@ Decisions and scope check are in the internal `Kiro-HQ/Kirotux/KIROTUX-HYPRLAND-
      in one "Import impasto vX" commit.
   2. Re-apply the patches below.
   3. Update `UPSTREAM`.
+  4. Install the bumped package on the QEMU VM and run, from the premium app's `tests/`:
+     `run-impasto-contract.sh` (headless: every IPC call, panel, layout and key description the premium Discover page
+     uses) and `run-live-hyprland.sh`. Both 0 FAIL before the flow publishes. A FAIL names what upstream renamed:
+     fix `khp_impasto.py` in kirotux-hyprland-premium (private, no remote) alongside the bump.
 - Never import `home/.local/share/wallpapers`, `system/` or `setup`. The images have no licence, and they would stay
   in the public history.
 

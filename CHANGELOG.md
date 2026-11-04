@@ -19,6 +19,8 @@
   signature's prefix, with `/usr/include/hyprland/src/version.h` as fallback); otherwise it prints a skip line.
   hyprglass is always loaded: its own load guard accepted 0.57.1 while it was built for 0.57.0. Tested on a test box
   with `hyprctl reload`: no config errors, hyprglass in, dynamic-cursors skipped.
+- CLAUDE.md "how to bump" step 4: run the premium app's `run-impasto-contract.sh` and `run-live-hyprland.sh` on the
+  QEMU VM after every impasto bump, so a renamed IPC call, panel or key description is caught before release.
 
 ### Files Modified
 - etc/xdg/quickshell/impasto/scripts/monitors.py
