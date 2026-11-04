@@ -18,6 +18,10 @@
   installs, and existing users after `kiro-skell` (the change is in `modules/input.lua`).
 - The launcher no longer hides an app whose menu entry repeats a line. The live ISO's installer was missing from it
   for that reason. Applies to everyone on the next package update.
+- Notifications are impasto's again. mako, which comes along with `kiro-wayland-dotfiles`, took over the
+  notification service at every login when an app sent a notification before impasto was up; impasto then had no
+  history and no do-not-disturb, and pop-ups were plain mako boxes. mako is now kept out of this session only; the
+  waybar editions on the same machine keep it. Applies to everyone on the next package update.
 
 ### Technical Details
 - `scripts/monitors.py` `rule_chunk()` adds `scale = 1` to any lit rule that has no `scale`; `hl.monitor{}` without
@@ -36,8 +40,15 @@
   now wins, as in other launchers. Found on a test laptop's live session: the installer was the only rejected entry.
 - `modules/input.lua` sets `numlock_by_default = true`, as `kiro-hyprland-dms` does. impasto's Settings never
   writes that key, so nothing overrides it.
+- `usr/lib/systemd/user/mako.service.d/kiro-hyprland-impasto.conf`: `ExecCondition` refuses mako while a Hyprland
+  of the user runs with `kiro-hyprland-impasto/hyprland.lua`. mako's D-Bus file has `SystemdService=mako.service`,
+  so dbus-broker activates it through systemd and the condition applies; quickshell then registers the name (it
+  retries whenever the owner leaves). Seen on a test box and a test laptop (`busctl --user status
+  org.freedesktop.Notifications` → mako; qs log "Could not register notification server"); with the drop-in, qs
+  owns the name and `notify-send` shows in the island.
 
 ### Files Modified
+- usr/lib/systemd/user/mako.service.d/kiro-hyprland-impasto.conf (new)
 - etc/xdg/quickshell/impasto/scripts/monitors.py
 - etc/skel/.local/share/impasto/profiles/1-kiro.json
 - etc/skel/.config/kiro-hyprland-impasto/hyprland.lua

@@ -64,7 +64,9 @@ Decisions and scope check are in the internal `Kiro-HQ/Kirotux/KIROTUX-HYPRLAND-
   have a shell.
 - Profiles override `keybinds.lua`. Change default keys in `1-kiro.json` **and** the matching `keybinds.lua`
   fallback, and keep `keybindings.txt` in lockstep.
-- Don't add mako/swaync, hyprlock or a polkit agent; the shell owns them.
+- Don't add mako/swaync, hyprlock or a polkit agent; the shell owns them. mako still arrives through
+  `kiro-wayland-dotfiles` and D-Bus-activates on an early notification, so `usr/lib/systemd/user/mako.service.d/`
+  refuses it in this session. Check `busctl --user status org.freedesktop.Notifications` shows `qs` on every test.
 - Lint: `ruff.toml`/`.codespellrc` skip the vendored tree. After patching an upstream `.py`, run
   `ruff check --no-force-exclude <file>` and make sure the count doesn't go up.
 - Test on QEMU (virtio-vga-gl) or metal, not VirtualBox.
