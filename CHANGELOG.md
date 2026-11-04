@@ -16,6 +16,8 @@
   users keep the wallpaper they have.
 - Num Lock is on when the session starts. The login screen turned it on, but Hyprland switched it back off. New
   installs, and existing users after `kiro-skell` (the change is in `modules/input.lua`).
+- The launcher no longer hides an app whose menu entry repeats a line. The live ISO's installer was missing from it
+  for that reason. Applies to everyone on the next package update.
 
 ### Technical Details
 - `scripts/monitors.py` `rule_chunk()` adds `scale = 1` to any lit rule that has no `scale`; `hl.monitor{}` without
@@ -29,6 +31,9 @@
 - `kiro-impasto.jpg` was made from Kiro's own `kiro.jpg` with ComfyUI on a test box (SDXL base img2img, strength
   0.70, seed 2026, RealESRGAN x4 to 3840x2160, JPEG q90), so it carries no third-party artwork. It sits in `bg/`
   next to `kiro.jpg`, with the same relative symlink in `~/.local/share/wallpapers`, and `1-kiro.json` points to it.
+- `scripts/applications.py` reads desktop entries with `strict=False` (Kiro patch 6). Strict `configparser` raised
+  `DuplicateOptionError` on `cal-kiro.desktop` (two `Type=Application`) and `read_entry()` dropped it; the last value
+  now wins, as in other launchers. Found on a test laptop's live session: the installer was the only rejected entry.
 - `modules/input.lua` sets `numlock_by_default = true`, as `kiro-hyprland-dms` does. impasto's Settings never
   writes that key, so nothing overrides it.
 
@@ -37,6 +42,7 @@
 - etc/skel/.local/share/impasto/profiles/1-kiro.json
 - etc/skel/.config/kiro-hyprland-impasto/hyprland.lua
 - etc/skel/.config/kiro-hyprland-impasto/modules/input.lua
+- etc/xdg/quickshell/impasto/scripts/applications.py
 - etc/skel/.config/kiro-hyprland-impasto/bg/kiro-impasto.jpg (new)
 - etc/skel/.local/share/wallpapers/kiro-impasto.jpg (new symlink)
 - README.md

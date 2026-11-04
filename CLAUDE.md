@@ -56,6 +56,8 @@ Decisions and scope check are in the internal `Kiro-HQ/Kirotux/KIROTUX-HYPRLAND-
    profile. **Its `settings.keys` are the real default keybinds**, not `keybinds.lua`'s fallbacks.
 5. `scripts/monitors.py` `rule_chunk()`: a lit screen saved without a scale gets `scale = 1` (otherwise Hyprland
    uses `auto` and overrides `modules/monitors.lua`).
+6. `scripts/applications.py` `read_entry()`: `ConfigParser(..., strict=False)`, so a desktop entry with a duplicated key
+   still shows in the launcher (the live ISO's installer entry vanished, 2026-11-04).
 
 ## Gotchas
 - `hl.exec_cmd` (autostart) runs argv without a shell. Wrap tests and `&&` in `sh -c`. Binds (`hl.dsp.exec_cmd`) do
