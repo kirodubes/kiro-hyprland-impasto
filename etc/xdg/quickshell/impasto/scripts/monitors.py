@@ -117,6 +117,10 @@ def rule_chunk(rule):
     """
     if not isinstance(rule, dict) or "output" not in rule:
         return None
+    # Kiro: a lit screen saved without a scale gets 100%. Left out, Hyprland
+    # falls back to `auto`, which overrides monitors.lua (3 in QEMU).
+    if "scale" not in rule and rule.get("disabled") is not True:
+        rule = dict(rule, scale=1)
     if any(field not in FIELDS for field in rule):
         return None
     pairs = []

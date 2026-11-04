@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026.11.04
+
+### What Changed
+- Screens default to 100% scale. A screen saved in impasto's Settings → Displays without a scale used to fall back
+  to Hyprland's automatic scale (300% in a QEMU VM). A scale picked in Settings still wins. Applies to existing
+  users too, on the next package update.
+
+### Technical Details
+- `scripts/monitors.py` `rule_chunk()` adds `scale = 1` to any lit rule that has no `scale`; `hl.monitor{}` without
+  one means `auto`, which overrode `modules/monitors.lua`. Listed as Kiro patch 5 in CLAUDE.md.
+
+### Files Modified
+- etc/xdg/quickshell/impasto/scripts/monitors.py
+- CLAUDE.md
+
 ## 2026.11.03
 
 ### What Changed

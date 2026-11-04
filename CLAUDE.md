@@ -48,6 +48,8 @@ Decisions and scope check are in the internal `Kiro-HQ/Kirotux/KIROTUX-HYPRLAND-
    `hyprland.lua` (plugin loads, `appearance.lua` last); `usr/bin/impasto` (`qs ipc -p`).
 4. Profiles: upstream's three replaced by `1-kiro.json` (the Kiro wallpaper). A fresh install takes the first
    profile. **Its `settings.keys` are the real default keybinds**, not `keybinds.lua`'s fallbacks.
+5. `scripts/monitors.py` `rule_chunk()`: a lit screen saved without a scale gets `scale = 1` (otherwise Hyprland
+   uses `auto` and overrides `modules/monitors.lua`).
 
 ## Gotchas
 - `hl.exec_cmd` (autostart) runs argv without a shell. Wrap tests and `&&` in `sh -c`. Binds (`hl.dsp.exec_cmd`) do
