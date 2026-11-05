@@ -224,7 +224,7 @@ Singleton {
     // One width whatever it says, as a phone's island keeps one expanded
     // shape: the row is laid out inside it, with the app and the time at the
     // far end of the title so a short alert is not text and then nothing.
-    readonly property int toastWidth: 500  // Kiro: +100 so the message is readable
+    readonly property int toastWidth: 400
 
     readonly property int textGap: 12
     readonly property int buttonGap: 8

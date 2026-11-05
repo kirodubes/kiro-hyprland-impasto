@@ -74,6 +74,16 @@ Rectangle {
     // default, so an island without a bar gets the size it asks for.
     property int roomForPanel: 100000
 
+    // Kiro: the bar's width (`Bar.qml`), so notifications can take a share of
+    // the screen. 30% of it, never under their own width nor over 700 px.
+    property int screenWidth: 0
+
+    function readableWidth(base: int): int {
+        if (root.screenWidth <= 0)
+            return base
+        return Math.max(base, Math.min(700, Math.round(root.screenWidth * 0.30)))
+    }
+
     readonly property int overviewRows: Math.ceil(HyprlandService.maximum / 5)
 
     // ── PANEL SIZES ─────────────────────────────────────────────────────────
@@ -126,7 +136,12 @@ Rectangle {
     readonly property var appearanceSize: ({ width: 940, height: 196 })
 
     // A module's detail, sized from the catalogue.
-    readonly property var moduleSize: ModuleService.openSize(ModuleService.openId)
+    readonly property var moduleSize: {
+        const size = ModuleService.openSize(ModuleService.openId)
+        if (ModuleService.openId !== "notifications")
+            return size
+        return { width: root.readableWidth(size.width), height: size.height }
+    }
 
     readonly property var panelSize:
         root.panelSizes[islandState.openPanel] ?? root.panelSizes.controls
@@ -144,7 +159,7 @@ Rectangle {
                         padding: 0 },
         osd:          { width: 260, height: Theme.capsuleHeight, padding: 10 },
         // Taller when the notification brings buttons.
-        notification: { width: NotificationService.toastWidth,
+        notification: { width: root.readableWidth(NotificationService.toastWidth),
                         height: NotificationService.toastHeight,
                         padding: NotificationService.toastPadding },
         panel:        { width: root.panelWidth, height: root.panelHeight, padding: Theme.panelPadding }

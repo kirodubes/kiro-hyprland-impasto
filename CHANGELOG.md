@@ -3,8 +3,9 @@
 ## 2026.11.05
 
 ### What Changed
-- Notifications are 100 px wider, so the message is readable: the Notifications card (bell in the bar) goes
-  from 380 to 480 px and the pop-up on the island from 400 to 500 px.
+- Notifications scale with the screen, so the message is readable: the pop-up on the island and the Notifications
+  card (bell in the bar) take 30% of the screen width, never narrower than before (400 / 380 px) and never wider
+  than 700 px. On a 1080p screen that is about 576 px.
 - A one-time KiroTux Premium note. About two minutes after the first login in this session, one notification says
   that KiroTux Premium exists (a settings app for this desktop plus a tested installer ISO), with a "Have a look"
   button that opens the Ko-fi page. It shows once per user, never on the live ISO, and never when the premium app is
@@ -17,13 +18,15 @@
 - It waits for `org.freedesktop.Notifications` to have an owner, writes the marker
   `~/.local/state/kiro-hyprland-impasto/premium-hint-shown` before showing (once even if dismissed), then uses
   `notify-send --action --wait`; impasto's notification server supports actions.
-- Only the notifications entry in `ModuleService.qml` gets `Theme.cardWidth + 100`; the shared `cardWidth` stays
-  380 so the other cards keep their size. `toastWidth` in `NotificationService.qml` is 500.
+- `DynamicIsland.qml` gets a `screenWidth` property (fed `root.width` by `Bar.qml`, the full-screen bar window)
+  and `readableWidth(base)` = clamp(30% of it, base, 700). It wraps the notification layer's `toastWidth` and the
+  notifications entry of `moduleSize`; the services keep upstream's 400 / `Theme.cardWidth`, so other cards are
+  untouched. Replaces the fixed +100 px from earlier today.
 
 ### Files Modified
 - `usr/bin/kiro-hyprland-impasto-premium-hint` (new)
 - `etc/xdg/autostart/kiro-hyprland-impasto-premium-hint.desktop` (new)
-- `etc/xdg/quickshell/impasto/services/ModuleService.qml`, `etc/xdg/quickshell/impasto/services/NotificationService.qml`
+- `etc/xdg/quickshell/impasto/bar/widgets/DynamicIsland.qml`, `etc/xdg/quickshell/impasto/bar/Bar.qml`
 - `README.md`, `CLAUDE.md`, `CHANGELOG.md`
 
 ## 2026.11.04

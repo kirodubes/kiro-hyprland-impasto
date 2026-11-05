@@ -707,6 +707,7 @@ PanelWindow {
             active: root.live
             hosted: root.unified
             roomForPanel: root.panelRoom
+            screenWidth: root.width
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.top
             anchors.topMargin: root.islandTopMargin
