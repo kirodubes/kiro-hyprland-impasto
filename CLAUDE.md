@@ -24,6 +24,11 @@ Decisions and scope check are in the internal `Kiro-HQ/Kirotux/KIROTUX-HYPRLAND-
 - **Plugins:** `hypr-dynamic-cursors` and `hyprglass` are separate packages (KIRO-PKG-BUILD-3PARTY), loaded from
   `/usr/lib/hyprland-plugins/` by `hyprland.lua` when present. They are not on the AUR and must be rebuilt for every
   Hyprland bump.
+- **Premium hint (ADR-025):** `usr/bin/kiro-hyprland-impasto-premium-hint`, started by
+  `etc/xdg/autostart/kiro-hyprland-impasto-premium-hint.desktop` (uwsm runs XDG autostart; system-wide so it reaches
+  existing users, unlike skel). Once per user, 120 s after login: skipped outside this session (pgrep on the config
+  path, like the mako drop-in), on the live ISO, when `kirotux-hyprland-premium` is installed, or when the marker
+  `~/.local/state/kiro-hyprland-impasto/premium-hint-shown` exists. The marker is written before it shows.
 - **Default apps:** `modules/programs.lua`: alacritty, Thunar, Firefox, subl, overridden by the premium app's
   `kirotux_apps.lua`.
 

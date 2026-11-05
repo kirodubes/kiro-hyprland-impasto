@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=KiroTux Premium hint
+Comment=Shows once, in the Kiro Hyprland Impasto session only, that KiroTux Premium exists
+Exec=/usr/bin/kiro-hyprland-impasto-premium-hint
+OnlyShowIn=Hyprland;
+NoDisplay=true
+X-GNOME-Autostart-enabled=true

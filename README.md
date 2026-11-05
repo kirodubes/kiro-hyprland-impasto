@@ -19,6 +19,7 @@ This package is **modified from impasto v0.6.0** (GPL-3.0). See [What Kiro chang
 | `/etc/skel/.local/share/impasto/` | the Kiro profile and the palette board |
 | `/usr/bin/impasto` | impasto's command line (`impasto wallpaper set <file>`, `impasto status`, …) |
 | `/usr/bin/kiro-hyprland-impasto-session` | the session entry point: uwsm + Hyprland on this edition's config |
+| `/usr/bin/kiro-hyprland-impasto-premium-hint` + `/etc/xdg/autostart/` entry | a one-time note about KiroTux Premium (see below) |
 | `/usr/share/wayland-sessions/kiro-hyprland-impasto.desktop` | "Kiro Hyprland Impasto" in the login screen |
 | `/usr/share/kiro/kiro-hyprland-impasto/` | a pristine copy of the config, to reset to |
 
@@ -48,6 +49,10 @@ Optional extras: `hypr-dynamic-cursors` (shake the pointer to find it), `hyprgla
 - Wallpaper colours are applied to GTK apps (Thunar included) and Qt apps too. That's meant for the KiroTux ISO,
   where this is the only desktop. If you install it next to XFCE or Plasma, those desktops see the colours as well.
 - The two Hyprland plugins come as packages instead of being built with `hyprpm`.
+- Once, about two minutes after your first login, a notification says that KiroTux Premium exists (a settings
+  app for this desktop plus a tested installer ISO), with a button to the Ko-fi page. It never comes back, and it
+  doesn't show on the live ISO or when the premium app is installed. Delete
+  `~/.local/state/kiro-hyprland-impasto/premium-hint-shown` to see it again.
 
 The full list is in [CLAUDE.md](CLAUDE.md).
 

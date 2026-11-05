@@ -1,5 +1,26 @@
 # Changelog
 
+## 2026.11.05
+
+### What Changed
+- A one-time KiroTux Premium note. About two minutes after the first login in this session, one notification says
+  that KiroTux Premium exists (a settings app for this desktop plus a tested installer ISO), with a "Have a look"
+  button that opens the Ko-fi page. It shows once per user, never on the live ISO, and never when the premium app is
+  installed. Applies to existing users too, on the next package update.
+
+### Technical Details
+- `usr/bin/kiro-hyprland-impasto-premium-hint` is started by an XDG autostart entry (`OnlyShowIn=Hyprland`), which
+  uwsm runs; a skel change would not reach existing users. The script gates on Hyprland running with this
+  edition's config (the same pgrep as the mako drop-in), so the DMS and noctalia sessions never see it.
+- It waits for `org.freedesktop.Notifications` to have an owner, writes the marker
+  `~/.local/state/kiro-hyprland-impasto/premium-hint-shown` before showing (once even if dismissed), then uses
+  `notify-send --action --wait`; impasto's notification server supports actions.
+
+### Files Modified
+- `usr/bin/kiro-hyprland-impasto-premium-hint` (new)
+- `etc/xdg/autostart/kiro-hyprland-impasto-premium-hint.desktop` (new)
+- `README.md`, `CLAUDE.md`, `CHANGELOG.md`
+
 ## 2026.11.04
 
 ### What Changed

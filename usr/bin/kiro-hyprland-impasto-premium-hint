@@ -1,0 +1,113 @@
+#!/bin/bash
+set -euo pipefail
+##################################################################################################################
+# Author    : Erik Dubois
+# Website   : https://kiroproject.be
+##################################################################################################################
+#
+#   DO NOT JUST RUN THIS. EXAMINE AND JUDGE. RUN AT YOUR OWN RISK.
+#
+##################################################################################################################
+# Purpose:
+#   Shows one notification, once per user, in the Kiro Hyprland Impasto session: it says that KiroTux Premium
+#   (a settings app for this desktop plus a tested installer ISO) exists, with a button that opens the Ko-fi page.
+#   Started by /etc/xdg/autostart/kiro-hyprland-impasto-premium-hint.desktop (uwsm runs XDG autostart). It stays
+#   quiet in every other session, on the live ISO, when the premium app is installed, and after it has run once.
+# Why:
+#   ADR-025: the edition package stays free; a light, honest hint points free users to the paid premium app.
+#   Never a nag: the marker file is written before the notification shows, so it appears once even if dismissed.
+##################################################################################################################
+
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+
+if [[ -t 1 ]] && command -v tput >/dev/null 2>&1; then
+	RED="$(tput setaf 1 2>/dev/null || true)"
+	GREEN="$(tput setaf 2 2>/dev/null || true)"
+	YELLOW="$(tput setaf 3 2>/dev/null || true)"
+	BLUE="$(tput setaf 4 2>/dev/null || true)"
+	CYAN="$(tput setaf 6 2>/dev/null || true)"
+	RESET="$(tput sgr0 2>/dev/null || true)"
+else
+	RED="" GREEN="" YELLOW="" BLUE="" CYAN="" RESET=""
+fi
+
+log_section() { echo "${GREEN}############ $* ############${RESET}"; }
+log_info()    { echo "${BLUE}############ $* ############${RESET}"; }
+log_warn()    { echo "${YELLOW}############ $* ############${RESET}"; }
+log_error()   { echo "${RED}############ $* ############${RESET}"; }
+log_success() { echo "${GREEN}############ $* ############${RESET}"; }
+
+on_error() {
+	echo "${RED}ERROR on line $1: $2${RESET}"
+	sleep 10
+}
+trap 'on_error "$LINENO" "$BASH_COMMAND"' ERR
+
+##################################################################################################################
+# Functions
+##################################################################################################################
+
+PREMIUM_URL="https://ko-fi.com/s/a50edacc98"
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/kiro-hyprland-impasto"
+MARKER="$STATE_DIR/premium-hint-shown"
+START_DELAY=120
+
+should_show() {
+	# Same session test as the mako drop-in: Hyprland running with this edition's config.
+	if ! pgrep -u "$(id -u)" -f "kiro-hyprland-impasto/hyprland.lua" >/dev/null; then
+		log_info "Not the impasto session: nothing to do"
+		return 1
+	fi
+	if [[ -d /run/archiso ]]; then
+		log_info "Live ISO: nothing to do"
+		return 1
+	fi
+	if command -v kirotux-hyprland-premium >/dev/null 2>&1; then
+		log_info "KiroTux Premium is installed: nothing to do"
+		return 1
+	fi
+	if [[ -e "$MARKER" ]]; then
+		log_info "Hint already shown once: nothing to do"
+		return 1
+	fi
+	return 0
+}
+
+wait_for_notifications() {
+	local _try
+	for _try in $(seq 1 30); do
+		if busctl --user --no-pager status org.freedesktop.Notifications >/dev/null 2>&1; then
+			return 0
+		fi
+		sleep 2
+	done
+	log_warn "No notification server after 60 seconds"
+	return 1
+}
+
+show_hint() {
+	local _answer
+	_answer="$(notify-send --app-name="KiroTux" --icon=preferences-desktop-theme \
+		--action=open="Have a look" --wait \
+		"Enjoying Kiro Hyprland Impasto?" \
+		"KiroTux Premium adds a settings app for this desktop (displays, keys, looks, presets and more) and a tested installer ISO. It also keeps Kiro going. This message shows only once." \
+		2>/dev/null)" || true
+	if [[ "$_answer" == "open" ]]; then
+		xdg-open "$PREMIUM_URL" >/dev/null 2>&1 &
+	fi
+}
+
+main() {
+	log_section "KiroTux Premium hint"
+	should_show || exit 0
+	sleep "$START_DELAY"
+	# Re-check: the user may have left the session or installed premium meanwhile.
+	should_show || exit 0
+	wait_for_notifications || exit 0
+	mkdir -p "$STATE_DIR"
+	touch "$MARKER"
+	show_hint
+	log_success "$(basename "$0") done"
+}
+
+main "$@"
