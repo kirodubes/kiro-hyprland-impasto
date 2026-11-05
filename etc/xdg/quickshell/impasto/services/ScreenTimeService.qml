@@ -30,7 +30,7 @@ Singleton {
     // ── RECORDING ───────────────────────────────────────────────────────────
 
     readonly property bool away: LockService.locked
-        || (IdleService.screenWatch.enabled && IdleService.screenWatch.isIdle)
+        || IdleService.screenIdle
 
     readonly property Process recorder: Process {
         command: [root.script, "record"]

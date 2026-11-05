@@ -87,6 +87,7 @@
       "firefox.desktop"
     ],
     "greeting": "lava",
+    "idleScreen": 15,
     "wallpaperTransition": "fade",
     "keys": {
       "Applications · Open a terminal": "SUPER + Return",

@@ -10,6 +10,10 @@
   that KiroTux Premium exists (a settings app for this desktop plus a tested installer ISO), with a "Have a look"
   button that opens the Ko-fi page. It shows once per user, never on the live ISO, and never when the premium app is
   installed. Applies to existing users too, on the next package update.
+- The screen goes black after 15 minutes without input, like on XFCE. Idle screen-off, lock and suspend also work
+  now: in impasto they never fired, whatever the Settings > Session sliders said. Existing users keep their own
+  value (it was 0, Never); new users get 15 minutes from the Kiro profile. Media that holds the screen awake
+  (videos in mpv or a browser) still keeps it on.
 
 ### Technical Details
 - `usr/bin/kiro-hyprland-impasto-premium-hint` is started by an XDG autostart entry (`OnlyShowIn=Hyprland`), which
@@ -22,11 +26,22 @@
   and `readableWidth(base)` = clamp(30% of it, base, 700). It wraps the notification layer's `toastWidth` and the
   notifications entry of `moduleSize`; the services keep upstream's 400 / `Theme.cardWidth`, so other cards are
   untouched. Replaces the fixed +100 px from earlier today.
+- Root cause: Quickshell 0.3.2's `IdleMonitor` never arms when its `timeout`/`enabled` change after creation, and
+  impasto's monitors exist before `settings.json` loads (so they start at 0). Shown on a test box: a monitor armed
+  2 s late never fired while a control with its final value did. `IdleService.qml` now builds each monitor in a
+  `Variants` whose model is `[minutes]` (or `[]` for Never), so it is created with its final value and rebuilt when
+  the slider moves; `IdleService.screenIdle` replaces `screenWatch.isIdle` for `ScreenTimeService`. Tested on real
+  hardware: installed shell stayed on for 90 s at 1 min; patched shell blanked after 61 s, and after a live change to
+  2 min after 120 s.
+- `1-kiro.json` gets `"idleScreen": 15` (XFCE's `blank-on-ac`/`blank-on-battery` = 15 min). The `dpms` dispatch
+  without a monitor name turns every screen off.
 
 ### Files Modified
 - `usr/bin/kiro-hyprland-impasto-premium-hint` (new)
 - `etc/xdg/autostart/kiro-hyprland-impasto-premium-hint.desktop` (new)
 - `etc/xdg/quickshell/impasto/bar/widgets/DynamicIsland.qml`, `etc/xdg/quickshell/impasto/bar/Bar.qml`
+- `etc/xdg/quickshell/impasto/services/IdleService.qml`, `etc/xdg/quickshell/impasto/services/ScreenTimeService.qml`
+- `etc/skel/.local/share/impasto/profiles/1-kiro.json`
 - `README.md`, `CLAUDE.md`, `CHANGELOG.md`
 
 ## 2026.11.04

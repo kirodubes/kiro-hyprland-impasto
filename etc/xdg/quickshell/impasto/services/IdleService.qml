@@ -27,35 +27,48 @@ Singleton {
     readonly property int screenAfter: SettingsService.idleScreen
     readonly property int suspendAfter: SettingsService.idleSuspend
 
-    readonly property IdleMonitor lockWatch: IdleMonitor {
-        enabled: root.lockAfter > 0
-        timeout: root.lockAfter * 60
-        respectInhibitors: true
+    // Kiro: Quickshell 0.3.2 never arms an `IdleMonitor` whose timeout or
+    // `enabled` changes after creation, and settings.json loads after these
+    // exist, so each monitor is built by a `Variants` with its final value
+    // and rebuilt when the setting moves.
+    readonly property bool screenIdle: screenWatch.instances.length > 0 && screenWatch.instances[0].isIdle
 
-        // `lock()` is a no-op when already locked.
-        onIsIdleChanged: {
-            if (lockWatch.isIdle)
-                LockService.lock()
+    component Watch: IdleMonitor {
+        required property int modelData
+        timeout: modelData * 60
+        respectInhibitors: true
+    }
+
+    // `lock()` is a no-op when already locked.
+    readonly property Variants lockWatch: Variants {
+        model: root.lockAfter > 0 ? [root.lockAfter] : []
+        Watch {
+            id: lockMonitor
+            onIsIdleChanged: {
+                if (lockMonitor.isIdle)
+                    LockService.lock()
+            }
         }
     }
 
-    readonly property IdleMonitor screenWatch: IdleMonitor {
-        enabled: root.screenAfter > 0
-        timeout: root.screenAfter * 60
-        respectInhibitors: true
-        onIsIdleChanged: root.screen(!screenWatch.isIdle)
+    readonly property Variants screenWatch: Variants {
+        model: root.screenAfter > 0 ? [root.screenAfter] : []
+        Watch {
+            id: screenMonitor
+            onIsIdleChanged: root.screen(!screenMonitor.isIdle)
+        }
     }
 
-    readonly property IdleMonitor sleepWatch: IdleMonitor {
-        enabled: root.suspendAfter > 0
-        timeout: root.suspendAfter * 60
-        respectInhibitors: true
-
-        // The session action locks and waits for the compositor to confirm
-        // before suspending.
-        onIsIdleChanged: {
-            if (sleepWatch.isIdle)
-                SessionService.run("suspend")
+    // The session action locks and waits for the compositor to confirm
+    // before suspending.
+    readonly property Variants sleepWatch: Variants {
+        model: root.suspendAfter > 0 ? [root.suspendAfter] : []
+        Watch {
+            id: sleepMonitor
+            onIsIdleChanged: {
+                if (sleepMonitor.isIdle)
+                    SessionService.run("suspend")
+            }
         }
     }
 

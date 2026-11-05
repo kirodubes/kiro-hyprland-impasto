@@ -65,6 +65,9 @@ Decisions and scope check are in the internal `Kiro-HQ/Kirotux/KIROTUX-HYPRLAND-
    still shows in the launcher (the live ISO's installer entry vanished, 2026-11-04).
 7. Notification width follows the screen: `bar/widgets/DynamicIsland.qml` `screenWidth` + `readableWidth()`
    (30%, clamped base..700) on the toast and the notifications module; `bar/Bar.qml` passes `screenWidth: root.width`.
+8. `services/IdleService.qml`: each `IdleMonitor` is built by a `Variants` (model `[minutes]` or `[]`), since
+   Quickshell 0.3.2 never arms a monitor whose timeout changes after creation; `screenIdle` feeds `ScreenTimeService`.
+   `1-kiro.json` carries `idleScreen: 15` (XFCE's blank time). Drop the patch once upstream/Quickshell re-arms.
 
 ## Gotchas
 - `hl.exec_cmd` (autostart) runs argv without a shell. Wrap tests and `&&` in `sh -c`. Binds (`hl.dsp.exec_cmd`) do
