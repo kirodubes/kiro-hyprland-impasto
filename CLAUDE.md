@@ -63,6 +63,8 @@ Decisions and scope check are in the internal `Kiro-HQ/Kirotux/KIROTUX-HYPRLAND-
    uses `auto` and overrides `modules/monitors.lua`).
 6. `scripts/applications.py` `read_entry()`: `ConfigParser(..., strict=False)`, so a desktop entry with a duplicated key
    still shows in the launcher (the live ISO's installer entry vanished, 2026-11-04).
+7. Notifications 100 px wider: `services/ModuleService.qml` notifications entry `Theme.cardWidth + 100`,
+   `services/NotificationService.qml` `toastWidth: 500`.
 
 ## Gotchas
 - `hl.exec_cmd` (autostart) runs argv without a shell. Wrap tests and `&&` in `sh -c`. Binds (`hl.dsp.exec_cmd`) do
