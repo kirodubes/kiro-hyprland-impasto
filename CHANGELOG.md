@@ -31,6 +31,8 @@
   32 PASS / 0 FAIL, both before and after (current premium tree via `KHP_APP_DIR`); the user's
   `~/.config/kiro-hyprland-impasto` untouched; `qs` owns the notifications. CLAUDE.md step 4 now says: test the
   upgrade on riker/picard with the edition's SSD.
+- Released as `26.11-13` (nemesis_repo). riker took it through a normal `pacman -Syu` from the online repo and
+  rebooted: contract 18/0, live premium test 32/0, no Hyprland config errors, `qs` owns the notifications.
 - Recipe optdepends (KIRO-PKG-BUILD-APPS): songrec, khal, python-recurring-ical-events, breeze-icons.
 - Not imported, as before: wallpapers (v0.6.1 adds GTA VI characters), `system/`, `setup`, printing packages.
 
