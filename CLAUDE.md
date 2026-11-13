@@ -44,7 +44,11 @@ Decisions and scope check are in the internal `Kiro-HQ/Kirotux/KIROTUX-HYPRLAND-
      always conflict (deleted here): `git rm` them, and copy any new key lines they gained into `1-kiro.json`.
   3. Check new upstream keys against the Kiro scheme (`keybinds.lua`, `1-kiro.json`, `keybindings.txt`), new
      user-visible `./setup` hints, and new packages in upstream `packages/pacman.txt` (optdepends in the recipe).
-  4. Install the bumped package on the QEMU VM and run, from the premium app's `tests/`:
+  4. Buyers upgrade from the repo, so test the **upgrade** on a real KiroTux Impasto install: ask Erik to boot
+     riker or picard with that SSD (the QEMU VM is only a fallback). Run the two tests below first as a baseline,
+     `pacman -U` a local build with a test pkgrel (`26.11-12.1`, so the flow's next pkgrel still upgrades), restart
+     the shell, run them again. With `KHP_APP_DIR=<tree>` they test the current premium app tree. From the
+     premium app's `tests/`:
      `run-impasto-contract.sh` (headless: every IPC call, panel, layout and key description the premium Discover page
      uses) and `run-live-hyprland.sh`. Both 0 FAIL before the flow publishes. A FAIL names what upstream renamed:
      fix `khp_impasto.py` in kirotux-hyprland-premium (private, no remote) alongside the bump.

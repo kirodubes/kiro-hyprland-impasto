@@ -26,6 +26,11 @@
 - Checked statically: `Hyprland --verify-config` ok (0.57.2); the 54 IPC functions are identical; panel list only
   gained `power` and `record`; status fields, layouts and every Discover key description present; no new `./setup`
   hints; `usr/bin/impasto` ruff 6 -> 5.
+- Tested as an upgrade on riker (real KiroTux Impasto install, Hyprland 0.57.2, two screens): local build
+  `26.11-12.1` over `26.11-12` with `pacman -U`, shell restarted. Contract 18 PASS / 0 FAIL and live premium test
+  32 PASS / 0 FAIL, both before and after (current premium tree via `KHP_APP_DIR`); the user's
+  `~/.config/kiro-hyprland-impasto` untouched; `qs` owns the notifications. CLAUDE.md step 4 now says: test the
+  upgrade on riker/picard with the edition's SSD.
 - Recipe optdepends (KIRO-PKG-BUILD-APPS): songrec, khal, python-recurring-ical-events, breeze-icons.
 - Not imported, as before: wallpapers (v0.6.1 adds GTA VI characters), `system/`, `setup`, printing packages.
 
