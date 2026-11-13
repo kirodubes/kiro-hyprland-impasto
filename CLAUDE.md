@@ -2,7 +2,7 @@
 
 ## Overview
 Config package for the **Kiro Hyprland Impasto edition**: Hyprland with the impasto Quickshell shell
-(andreumassanet/impasto, GPL-3.0), vendored at **v0.6.0** (see `UPSTREAM`). Sibling of
+(andreumassanet/impasto, GPL-3.0), vendored at **v0.6.1** (see `UPSTREAM`). Sibling of
 [kiro-hyprland-dms](../kiro-hyprland-dms/CLAUDE.md) and [kiro-hyprland-noctalia](../kiro-hyprland-noctalia/CLAUDE.md).
 Public, open-core, shipped via `nemesis_repo`. Base of the KiroTux Hyprland Impasto ISO (`kirotux-hypr-impasto`).
 Decisions and scope check are in the internal `Kiro-HQ/Kirotux/KIROTUX-HYPRLAND-IMPASTO-RELEASE-PLAN.md` and
@@ -33,13 +33,17 @@ Decisions and scope check are in the internal `Kiro-HQ/Kirotux/KIROTUX-HYPRLAND-
   `kirotux_apps.lua`.
 
 ## Vendored upstream: how to bump
-- Commit `103ab24` is the pristine v0.6.0 import. Every Kiro change is a commit after it, so
-  `git diff 103ab24..HEAD -- etc/xdg etc/skel usr/bin/impasto` is the patch set.
+- Branch `impasto-upstream` holds only pristine upstream imports: `103ab24` (v0.6.0), `1dec6d5` (v0.6.1). `main`
+  merges it, so `git diff impasto-upstream..main -- etc/xdg etc/skel usr/bin/impasto` is the patch set.
 - To bump:
-  1. Copy the new tag's `home/.config/quickshell`, `home/.config/hypr` and `home/.local/bin/impasto` over the tree
-     in one "Import impasto vX" commit.
-  2. Re-apply the patches below.
-  3. Update `UPSTREAM`.
+  1. `git worktree add <scratch> impasto-upstream`; in it copy the new tag's `home/.config/quickshell` (rsync
+     --delete), `home/.config/hypr/hyprland.lua` + `modules/*.lua`, `home/.local/bin/impasto` and
+     `home/.local/share/impasto/profiles/*.json` over the tree; update `UPSTREAM` (the tag's `^{commit}`, not the
+     tag object); commit "Import impasto vX (pristine, unmodified)"; remove the worktree.
+  2. `git merge --no-ff impasto-upstream` on `main`: git three-way-merges the patches below. Upstream's profiles
+     always conflict (deleted here): `git rm` them, and copy any new key lines they gained into `1-kiro.json`.
+  3. Check new upstream keys against the Kiro scheme (`keybinds.lua`, `1-kiro.json`, `keybindings.txt`), new
+     user-visible `./setup` hints, and new packages in upstream `packages/pacman.txt` (optdepends in the recipe).
   4. Install the bumped package on the QEMU VM and run, from the premium app's `tests/`:
      `run-impasto-contract.sh` (headless: every IPC call, panel, layout and key description the premium Discover page
      uses) and `run-live-hyprland.sh`. Both 0 FAIL before the flow publishes. A FAIL names what upstream renamed:
@@ -54,20 +58,24 @@ Decisions and scope check are in the internal `Kiro-HQ/Kirotux/KIROTUX-HYPRLAND-
    `SessionSection.qml`, together with their keys in `theme/Tr.qml` (English key + Spanish value).
 3. `hypr/modules/programs.lua`, `env.lua` (Kiro env, no impasto-cursor), `input.lua` (installer keyboard),
    `autostart.lua` (`qs -p`, no hyprpm block, Kiro start), `keybinds.lua` (Kiro scheme), `windowrules.lua`,
-   `hyprland.lua` (plugin loads with the dynamic-cursors commit guard, `appearance.lua` last); `usr/bin/impasto` (`qs ipc -p`).
+   `hyprland.lua` (plugin loads with the dynamic-cursors commit guard before upstream's `load()`/`custom/` hook,
+   `appearance.lua` last); `usr/bin/impasto` (`qs ipc -p`, and `capture_script()` points at the system-wide shell).
 4. Profiles: upstream's three replaced by `1-kiro.json` (wallpaper `bg/kiro-impasto.jpg`, the Kiro valley painted
    with SDXL from Kiro's own `kiro.jpg`; Kiro-HQ `COMFYUI/impasto.py`, seed 2026, strength 0.70). New wallpapers
    must come from our own images or a text-only `--scene`, never from a downloaded picture. A fresh install takes the first
    profile. **Its `settings.keys` are the real default keybinds**, not `keybinds.lua`'s fallbacks.
 5. `scripts/monitors.py` `rule_chunk()`: a lit screen saved without a scale gets `scale = 1` (otherwise Hyprland
    uses `auto` and overrides `modules/monitors.lua`).
-6. `scripts/applications.py` `read_entry()`: `ConfigParser(..., strict=False)`, so a desktop entry with a duplicated key
-   still shows in the launcher (the live ISO's installer entry vanished, 2026-11-04).
+6. ~~`scripts/applications.py` `strict=False`~~: upstream since v0.6.1 (PR #22), patch dropped.
 7. Notification width follows the screen: `bar/widgets/DynamicIsland.qml` `screenWidth` + `readableWidth()`
    (30%, clamped base..700) on the toast and the notifications module; `bar/Bar.qml` passes `screenWidth: root.width`.
 8. `services/IdleService.qml`: each `IdleMonitor` is built by a `Variants` (model `[minutes]` or `[]`), since
    Quickshell 0.3.2 never arms a monitor whose timeout changes after creation; `screenIdle` feeds `ScreenTimeService`.
-   `1-kiro.json` carries `idleScreen: 15` (XFCE's blank time). Drop the patch once upstream/Quickshell re-arms.
+   `1-kiro.json` carries `idleScreen: 15` (XFCE's blank time). Upstream's `keepAwake` (v0.6.1) is folded into the
+   `Variants` models, never into `enabled`. Drop the patch once upstream/Quickshell re-arms.
+9. `keybinds.lua`: upstream's `SUPER + Z` scratchpad pair is dropped (Kiro has it on `SUPER + U`, same
+   `special:scratchpad`, `SUPER + SHIFT + U` = upstream's `scratchpad_send`); the cheatsheet window is on
+   `SUPER + ALT + SHIFT + H` (`SUPER + SHIFT + H` = Narrower).
 
 ## Gotchas
 - `hl.exec_cmd` (autostart) runs argv without a shell. Wrap tests and `&&` in `sh -c`. Binds (`hl.dsp.exec_cmd`) do

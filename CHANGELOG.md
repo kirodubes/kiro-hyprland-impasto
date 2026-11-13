@@ -1,5 +1,40 @@
 # Changelog
 
+## 2026.11.13
+
+### What Changed
+- impasto updated from v0.6.0 to v0.6.1. New in the shell: workspace pills with app icons and a scratchpad pill,
+  hover cards on bar pieces, a network-speed piece, Caps Lock and the keyboard layout on the lock screen (with an
+  eye to show what is typed), launcher fallback rows (open, search or run what you typed), per-app notification
+  control (mute, silence, popups only), volume up to 150 %, calendar events from a link or khal, wallpapers by
+  folder with favourites, Bluetooth / Wi-Fi / Sound as tabs of one panel, a Song tile, full-colour weather, a
+  Keep awake tile, and no HDR switch when an app goes full-screen.
+- New keys: `super + alt + shift + H` shows every key in a window. Super tap (launcher) and Super hold (workspace
+  numbers) are there but off until turned on in Settings. `super + shift + U` now also takes a window back out of
+  the scratchpad.
+- `impasto capture screen` and `impasto capture text` work again: they looked for the shell in `~/.config`.
+
+### Technical Details
+- New vendor branch `impasto-upstream` (pristine imports only: `103ab24` v0.6.0, `1dec6d5` v0.6.1), merged into
+  `main` (`18b93fa`), so git three-way-merges the Kiro patches on every bump. Bump procedure in CLAUDE.md rewritten.
+- Conflicts: upstream profiles stay deleted (their new key lines copied into `1-kiro.json`); `applications.py`
+  takes upstream's (PR #22 is our `strict=False` fix, patch 6 dropped); `IdleService.qml` keeps the `Variants`
+  monitors and adds `!root.keepAwake` to their models, since Quickshell 0.3.2 never re-arms a monitor whose
+  `enabled` changes; `hyprland.lua` = plugin loader, upstream's `load()` + `custom/<module>.lua` hook, then
+  `appearance.lua`; `keybinds.lua` drops upstream's `SUPER + Z` scratchpad pair (Kiro's is on `SUPER + U`, same
+  `special:scratchpad`) and moves the cheatsheet window off `SUPER + SHIFT + H` (Narrower).
+- Checked statically: `Hyprland --verify-config` ok (0.57.2); the 54 IPC functions are identical; panel list only
+  gained `power` and `record`; status fields, layouts and every Discover key description present; no new `./setup`
+  hints; `usr/bin/impasto` ruff 6 -> 5.
+- Recipe optdepends (KIRO-PKG-BUILD-APPS): songrec, khal, python-recurring-ical-events, breeze-icons.
+- Not imported, as before: wallpapers (v0.6.1 adds GTA VI characters), `system/`, `setup`, printing packages.
+
+### Files Modified
+- `etc/xdg/quickshell/impasto/` (v0.6.1 import, `services/IdleService.qml` merge), `usr/bin/impasto`
+- `etc/skel/.config/kiro-hyprland-impasto/hyprland.lua`, `modules/*.lua`, `keybindings.txt`
+- `etc/skel/.local/share/impasto/profiles/1-kiro.json`, `UPSTREAM`, `CLAUDE.md`, `CHANGELOG.md`
+- `~/KIRO-PKG-BUILD-APPS/kiro-hyprland-impasto/PKGBUILD`
+
 ## 2026.11.05
 
 ### What Changed
