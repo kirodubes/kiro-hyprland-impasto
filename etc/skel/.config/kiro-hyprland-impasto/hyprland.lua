@@ -12,6 +12,10 @@
 --
 -- This file only loads the modules in modules/, in order. Hyprland runs each
 -- require in its own scope: an error in one module will not break the rest.
+--
+-- After each module, custom/<module>.lua in this folder is loaded if it
+-- exists, so a local change can override the module without editing a file
+-- that `setup update` installs. Nothing installs into custom/.
 
 -- Kiro: the two plugins come as packages (no hyprpm). Loaded only when installed;
 -- Hyprland parses the config again once a plugin is in, and input.lua and look.lua
@@ -52,14 +56,21 @@ for _, entry in ipairs({ { "/usr/lib/hyprland-plugins/dynamic-cursors.so", true 
     end
 end
 
-require("modules.monitors")
-require("modules.autostart")
-require("modules.env")
-require("modules.look")
-require("modules.animations")
-require("modules.input")
-require("modules.keybinds")
-require("modules.windowrules")
+local function load(name)
+    require("modules." .. name)
+    if package.searchpath("custom." .. name, package.path) then
+        require("custom." .. name)
+    end
+end
+
+load("monitors")
+load("autostart")
+load("env")
+load("look")
+load("animations")
+load("input")
+load("keybinds")
+load("windowrules")
 
 -- Kiro: KiroTux Hyprland Premium writes the look you change there to appearance.lua in
 -- this folder. Keep these lines last. pcall: a missing or broken file never breaks the session.

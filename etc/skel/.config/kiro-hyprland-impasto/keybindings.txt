@@ -121,6 +121,7 @@
   super + alt + N          Open the notes
   super + alt + K          Open the task board
   super + alt + H          Show every key
+  super + alt + shift + H  Show every key in a window
   super + ctrl + B         Hide or show the bar
   super + ctrl + W         Hide or show the desktop widgets
   super + alt + shift + G  Turn game mode on or off

@@ -277,8 +277,8 @@ def version():
 
 
 def capture_script():
-    config = os.environ.get("XDG_CONFIG_HOME") or os.path.expanduser("~/.config")
-    return os.path.join(config, "quickshell", "scripts", "capture.py")
+    # Kiro: the shell is system-wide, like the `qs ipc -p` path in call().
+    return "/etc/xdg/quickshell/impasto/scripts/capture.py"
 
 
 def focused_screen():

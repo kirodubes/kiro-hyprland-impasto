@@ -27,6 +27,17 @@ Singleton {
     readonly property int screenAfter: SettingsService.idleScreen
     readonly property int suspendAfter: SettingsService.idleSuspend
 
+    // Keeps the screen on: while set, none of the three acts. Not stored, so
+    // a new session starts as the settings say.
+    property bool keepAwake: false
+
+    // A screen already turned off by idle comes back on when keeping awake
+    // starts: nothing but this and SUPER + SHIFT + D wakes it.
+    onKeepAwakeChanged: {
+        if (root.keepAwake)
+            root.screen(true)
+    }
+
     // Kiro: Quickshell 0.3.2 never arms an `IdleMonitor` whose timeout or
     // `enabled` changes after creation, and settings.json loads after these
     // exist, so each monitor is built by a `Variants` with its final value
@@ -41,7 +52,7 @@ Singleton {
 
     // `lock()` is a no-op when already locked.
     readonly property Variants lockWatch: Variants {
-        model: root.lockAfter > 0 ? [root.lockAfter] : []
+        model: root.lockAfter > 0 && !root.keepAwake ? [root.lockAfter] : []
         Watch {
             id: lockMonitor
             onIsIdleChanged: {
@@ -52,7 +63,7 @@ Singleton {
     }
 
     readonly property Variants screenWatch: Variants {
-        model: root.screenAfter > 0 ? [root.screenAfter] : []
+        model: root.screenAfter > 0 && !root.keepAwake ? [root.screenAfter] : []
         Watch {
             id: screenMonitor
             onIsIdleChanged: root.screen(!screenMonitor.isIdle)
@@ -62,7 +73,7 @@ Singleton {
     // The session action locks and waits for the compositor to confirm
     // before suspending.
     readonly property Variants sleepWatch: Variants {
-        model: root.suspendAfter > 0 ? [root.suspendAfter] : []
+        model: root.suspendAfter > 0 && !root.keepAwake ? [root.suspendAfter] : []
         Watch {
             id: sleepMonitor
             onIsIdleChanged: {

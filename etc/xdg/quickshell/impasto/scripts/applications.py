@@ -31,7 +31,6 @@ APPLICATION_DIRS = [
 
 
 def read_entry(path):
-    # Kiro: strict=False, so one duplicated key (cal-kiro.desktop had two Type= lines) no longer hides the app.
     parser = configparser.ConfigParser(interpolation=None, strict=False)
     try:
         parser.read(path, encoding="utf-8")
