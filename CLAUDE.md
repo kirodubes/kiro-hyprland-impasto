@@ -2,7 +2,7 @@
 
 ## Overview
 Config package for the **Kiro Hyprland Impasto edition**: Hyprland with the impasto Quickshell shell
-(andreumassanet/impasto, GPL-3.0), vendored at **v0.6.1** (see `UPSTREAM`). Sibling of
+(andreumassanet/impasto, GPL-3.0), vendored at **v0.6.2** (see `UPSTREAM`). Sibling of
 [kiro-hyprland-dms](../kiro-hyprland-dms/CLAUDE.md) and [kiro-hyprland-noctalia](../kiro-hyprland-noctalia/CLAUDE.md).
 Public, open-core, shipped via `nemesis_repo`. Base of the KiroTux Hyprland Impasto ISO (`kirotux-hypr-impasto`).
 Decisions and scope check are in the internal `Kiro-HQ/Kirotux/KIROTUX-HYPRLAND-IMPASTO-RELEASE-PLAN.md` and
@@ -33,7 +33,8 @@ Decisions and scope check are in the internal `Kiro-HQ/Kirotux/KIROTUX-HYPRLAND-
   `kirotux_apps.lua`.
 
 ## Vendored upstream: how to bump
-- Branch `impasto-upstream` holds only pristine upstream imports: `103ab24` (v0.6.0), `1dec6d5` (v0.6.1). `main`
+- Branch `impasto-upstream` holds only pristine upstream imports: `103ab24` (v0.6.0), `1dec6d5` (v0.6.1), `76d2391` (v0.6.2).
+  `main`
   merges it, so `git diff impasto-upstream..main -- etc/xdg etc/skel usr/bin/impasto` is the patch set.
 - To bump:
   1. `git worktree add <scratch> impasto-upstream`; in it copy the new tag's `home/.config/quickshell` (rsync

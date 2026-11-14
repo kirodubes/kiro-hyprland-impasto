@@ -1,5 +1,38 @@
 # Changelog
 
+## 2026.11.14
+
+### What Changed
+- impasto updated from v0.6.1 to v0.6.2. New in the shell: an on-screen keyboard, a keyboard-layout piece and a
+  devices piece for the bar (with a matching desktop widget), scratchpads you define in Settings -> Scratchpads
+  (each with its own key and command), a media panel, more rows in the workspace overview with scratchpad tiles,
+  and a notification badge. Four new shell actions (arrange the desktop widgets, open the media panel, open
+  Wi-Fi/Bluetooth/Sound, dismiss the notification) and the on-screen keyboard come unbound; set them in
+  Settings -> Keys.
+- The Kiro keys stay as they were: upstream moved Maximise to `super + shift + F` (Kiro's file manager), focus
+  screen to `super + ctrl + arrows` (Kiro's groups) and game mode to `super + shift + G`; the Kiro profile keeps
+  ours, and upstream's new "send the window to the screen" stays unbound because its key is taken.
+- The on-screen keyboard needs `ydotool` (new optdepend in the recipe).
+
+### Technical Details
+- Pristine import `76d2391` on `impasto-upstream` (tag commit `c4753e5`), merged into `main` (`9e0615e`).
+  Not imported: upstream's new `~/.local/share/impasto/camera/` sample images (no licence, like the wallpapers).
+- Conflicts: `keybinds.lua` keeps Kiro's Maximise/Float keys, the CTRL-follow / SHIFT-send workspace loop and game
+  mode on `SUPER + ALT + SHIFT + G`, and adds upstream's unbound osk line; `DynamicIsland.qml` keeps the Kiro
+  `screenWidth` / `readableWidth()` patch beside upstream's new overview/dashboard properties. Upstream profiles
+  `git rm`-ed again; their four new key lines copied into `1-kiro.json` as unbound.
+- v0.6.2's own fix ("leave a new key unbound when a saved one already holds it") is what keeps upstream's changed
+  fallbacks from clashing with the profile keys.
+- Checked statically: `Hyprland --verify-config` ok (0.57.2); the 34 `Commands.qml` IPC functions are identical;
+  Kiro patch anchors 1, 3, 5, 7, 8 present; no new user-visible `./setup` hints in QML; `usr/bin/impasto` ruff
+  unchanged. Upstream `packages/pacman.txt` gained only `ydotool`.
+- Upgrade test on a real KiroTux Impasto install still to do before the flow.
+
+### Files Modified
+- `UPSTREAM`, `etc/xdg/quickshell/impasto/**` (71 files, 12 new), `etc/skel/.config/kiro-hyprland-impasto/hyprland.lua`,
+  `modules/*.lua`, `usr/bin/impasto`, `etc/skel/.local/share/impasto/profiles/1-kiro.json`, `CLAUDE.md`
+- Recipe: `KIRO-PKG-BUILD-APPS/kiro-hyprland-impasto/PKGBUILD` (optdepend `ydotool`)
+
 ## 2026.11.13
 
 ### What Changed
