@@ -22,16 +22,19 @@ singleton LyricsService      1.0 services/LyricsService.qml
 singleton NotificationService 1.0 services/NotificationService.qml
 singleton FaceService        1.0 services/FaceService.qml
 singleton LockService        1.0 services/LockService.qml
+singleton OskService         1.0 services/OskService.qml
 singleton WeatherService     1.0 services/WeatherService.qml
 singleton MarketsService     1.0 services/MarketsService.qml
 singleton SessionService     1.0 services/SessionService.qml
 singleton NetworkService     1.0 services/NetworkService.qml
 singleton FontService        1.0 services/FontService.qml
 singleton StatsService       1.0 services/StatsService.qml
+singleton KeyboardService    1.0 services/KeyboardService.qml
 singleton TimerService       1.0 services/TimerService.qml
 singleton CavaService        1.0 services/CavaService.qml
 singleton CompositorService  1.0 services/CompositorService.qml
 singleton BluetoothService   1.0 services/BluetoothService.qml
+singleton DeviceService      1.0 services/DeviceService.qml
 singleton ClaudeService      1.0 services/ClaudeService.qml
 singleton CodexService       1.0 services/CodexService.qml
 singleton UpdatesService     1.0 services/UpdatesService.qml
@@ -71,6 +74,7 @@ Card             1.0 components/Card.qml
 ColorSwatch      1.0 components/ColorSwatch.qml
 QuickTile        1.0 components/QuickTile.qml
 ToggleSwitch     1.0 components/ToggleSwitch.qml
+NotificationBadge 1.0 components/NotificationBadge.qml
 SegmentedControl 1.0 components/SegmentedControl.qml
 SettingRow       1.0 components/SettingRow.qml
 RingIndicator    1.0 components/RingIndicator.qml
@@ -106,6 +110,7 @@ Stepper          1.0 components/Stepper.qml
 StatCard         1.0 components/StatCard.qml
 SliderRow        1.0 components/SliderRow.qml
 IconButton       1.0 components/IconButton.qml
+PadIcon          1.0 components/PadIcon.qml
 PillButton       1.0 components/PillButton.qml
 SettingSlider    1.0 components/SettingSlider.qml
 SettingTiles     1.0 components/SettingTiles.qml
@@ -163,7 +168,9 @@ VolumeModule     1.0 bar/modules/VolumeModule.qml
 BrightnessModule 1.0 bar/modules/BrightnessModule.qml
 NetworkModule    1.0 bar/modules/NetworkModule.qml
 NetSpeedModule   1.0 bar/modules/NetSpeedModule.qml
+KeyboardModule   1.0 bar/modules/KeyboardModule.qml
 BluetoothModule  1.0 bar/modules/BluetoothModule.qml
+DevicesModule    1.0 bar/modules/DevicesModule.qml
 WeatherModule    1.0 bar/modules/WeatherModule.qml
 MarketsModule    1.0 bar/modules/MarketsModule.qml
 ScreenTimeModule 1.0 bar/modules/ScreenTimeModule.qml
@@ -209,6 +216,7 @@ NotesPanel       1.0 bar/island/NotesPanel.qml
 BoardPanel       1.0 bar/island/BoardPanel.qml
 KeysPanel        1.0 bar/island/KeysPanel.qml
 KeysWindow       1.0 bar/island/KeysWindow.qml
+MediaPanel       1.0 bar/island/MediaPanel.qml
 PackagesPanel    1.0 bar/island/PackagesPanel.qml
 GameBoard        1.0 bar/island/games/GameBoard.qml
 NotificationList 1.0 bar/island/controls/NotificationList.qml
