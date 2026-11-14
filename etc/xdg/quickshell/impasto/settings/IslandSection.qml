@@ -90,19 +90,14 @@ SettingsSection {
             }
 
             SettingRow {
-                // Offered only where there is an EasyEffects to show.
-                visible: AudioService.easyEffectsInstalled
-                label: Tr.t("Sound effects row")
-                reading: SettingsService.soundEffects
-                    ? Tr.t("The sound panel shows whether EasyEffects is on, when it is installed")
-                    : Tr.t("The sound panel stays to outputs, inputs and applications")
+                label: Tr.t("Music on the resting island")
+                reading: SettingsService.islandSpectrum ? Tr.t("Moving with the sound") : Tr.t("A still note")
 
                 ToggleSwitch {
-                    checked: SettingsService.soundEffects
-                    onToggled: checked => SettingsService.set("soundEffects", checked)
+                    checked: SettingsService.islandSpectrum
+                    onToggled: checked => SettingsService.set("islandSpectrum", checked)
                 }
             }
-
         }
 
         // ── CLOCK ───────────────────────────────────────────────────────────
@@ -306,6 +301,29 @@ SettingsSection {
                         SettingsService.set("notificationRules", rules)
                     }
                 }
+            }
+        }
+    }
+
+    // ── CHANGES OF STATE ────────────────────────────────────────────────────
+
+    SettingGroup {
+        visible: root.tab === "notifications"
+        title: Tr.t("Changes of state")
+        note: Tr.t("Say what changed when the microphone, a radio, a lock key or the like is switched.")
+        hint: Tr.t("On the island is the readout that also shows the volume and brightness. As a notification, the changes without a level come as notifications and the volume and brightness stay on the island; Do not disturb silences them. Off also hides the volume, brightness and charging readouts.")
+
+        SettingRow {
+            label: Tr.t("Shown")
+
+            SegmentedControl {
+                options: [
+                    { id: "island", label: Tr.t("On the island") },
+                    { id: "notification", label: Tr.t("As a notification") },
+                    { id: "off", label: Tr.t("Off") }
+                ]
+                current: SettingsService.osdStyle
+                onSelected: id => SettingsService.set("osdStyle", id)
             }
         }
     }

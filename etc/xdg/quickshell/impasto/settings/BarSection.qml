@@ -105,6 +105,15 @@ SettingsSection {
                     onToggled: checked => SettingsService.set("barEverywhere", checked)
                 }
             }
+
+            SettingRow {
+                label: Tr.t("Hide until pointed at")
+
+                ToggleSwitch {
+                    checked: SettingsService.barAutohide
+                    onToggled: checked => SettingsService.set("barAutohide", checked)
+                }
+            }
         }
 
         SettingGroup {
@@ -261,6 +270,24 @@ SettingsSection {
                 // The ceiling cannot end up below the floor.
                 if (SettingsService.workspaceCount > max)
                     SettingsService.set("workspaceCount", max)
+            }
+        }
+
+        SettingRow {
+            label: Tr.t("Workspace numbers")
+            reading: SettingsService.workspaceNumbers === "real"
+                ? Tr.t("Every workspace shows its own number: 23 reads as 23")
+                : Tr.t("A screen numbers its own ten from 1")
+            locked: !HyprlandService.perScreen
+            reason: Tr.t("Only with one set of workspaces for each screen")
+
+            SegmentedControl {
+                options: [
+                    { id: "block", label: Tr.t("From 1") },
+                    { id: "real", label: Tr.t("Real") }
+                ]
+                current: SettingsService.workspaceNumbers
+                onSelected: id => SettingsService.set("workspaceNumbers", id)
             }
         }
 

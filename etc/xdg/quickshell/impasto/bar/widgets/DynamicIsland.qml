@@ -84,7 +84,20 @@ Rectangle {
         return Math.max(base, Math.min(700, Math.round(root.screenWidth * 0.30)))
     }
 
-    readonly property int overviewRows: Math.ceil(HyprlandService.maximum / 5)
+    readonly property int overviewRows: Math.max(1, Math.min(HyprlandService.overviewRows, HyprlandService.overviewRowsShown))
+    // The scratchpad tiles under the strip: a row of them and the gap before it
+    // for every five.
+    readonly property int overviewPadHeight: {
+        const count = HyprlandService.overviewPads.length
+        if (count === 0)
+            return 0
+        const rows = Math.ceil(count / HyprlandService.overviewColumns)
+        return rows * HyprlandService.overviewRowHeight + 10
+    }
+    // The dashboard's height follows its tab (`DashboardPanel.heightWanted`).
+    property int dashboardHeight: 560
+    // The tab the dashboard opens on ("overview", "monitor", "system", "weather"), or "".
+    property string dashboardStart: ""
 
     // ── PANEL SIZES ─────────────────────────────────────────────────────────
     //
@@ -116,6 +129,7 @@ Rectangle {
         servers:    { width: ServersService.panelWidth, height: ServersService.panelHeight },
         screentime: { width: 940,  height: 614 },
         camera:     { width: CameraService.panelWidth, height: CameraService.panelHeight },
+        player:     { width: 980,  height: 330 },
         // A row per creature, plus one for the next egg.
         pet:        { width: 560,  height: 205 + 62 * PetService.family.length },
         // The shelf of cards, or the game being played at its own size.
@@ -131,7 +145,8 @@ Rectangle {
         module:     root.moduleSize,
         // A tray item's menu, a row per entry.
         tray:       { width: TrayService.menuWidth, height: TrayService.menuHeight },
-        overview:   { width: 1560, height: 72 + root.overviewRows * 190 }
+        overview:   { width: 1560, height: 72 + root.overviewRows * HyprlandService.overviewRowHeight
+                                      + root.overviewPadHeight }
     })
 
     // The strip over Bluetooth, Wi-Fi and Sound (`ConnectivityTabs`): the
@@ -210,6 +225,7 @@ Rectangle {
         servers: serversPanel,
         screentime: screenTimePanel,
         camera: cameraPanel,
+        player: mediaPanel,
         pet: petPanel,
         games: gamesPanel,
         notes: notesPanel,
@@ -672,6 +688,11 @@ Rectangle {
     Component {
         id: statsPanel
         StatsPanel { onClosed: root.close() }
+    }
+
+    Component {
+        id: mediaPanel
+        MediaPanel { onClosed: root.close() }
     }
 
     Component {

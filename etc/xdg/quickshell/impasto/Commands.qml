@@ -253,7 +253,7 @@ Scope {
 
         readonly property var names: ["launcher", "controls", "overview", "appearance", "palette",
             "stats", "session", "pet", "games", "notes", "board", "keys", "packages",
-            "machines", "servers", "screentime", "camera", "wifi", "bluetooth", "sound", "microphone", "brightness", "nightlight", "power", "record"]
+            "machines", "servers", "screentime", "camera", "player", "wifi", "bluetooth", "sound", "microphone", "brightness", "nightlight", "power", "record"]
 
         function open(name: string): string {
             if (names.indexOf(name) < 0)
@@ -386,6 +386,17 @@ Scope {
                 return root.fail(`not a layout: "${name}" (${ids.join(", ")} or next)`)
             CompositorService.remember("general:layout", name)
             return root.ok({ layout: name })
+        }
+    }
+
+    IpcHandler {
+        target: "osk"
+
+        function toggle(): string {
+            if (!SettingsService.osk)
+                return root.fail("the on-screen keyboard is off (setting osk)")
+            OskService.toggle()
+            return root.ok({ open: OskService.open })
         }
     }
 
