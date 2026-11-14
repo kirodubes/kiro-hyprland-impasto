@@ -27,10 +27,12 @@
   Kiro patch anchors 1, 3, 5, 7, 8 present; no new user-visible `./setup` hints in QML; `usr/bin/impasto` ruff
   unchanged. Upstream `packages/pacman.txt` gained only `ydotool`.
 - Tested as an upgrade on picard (real KiroTux Impasto install, Hyprland 0.57.2, quickshell 0.3.2): local build
-  `26.11-13.1` over `26.11-12` with `pacman -U`, shell restarted. Contract 18 PASS / 0 FAIL and live premium test
+  `26.11-13.1` over `26.11-13` with `pacman -U`, shell restarted. Contract 18 PASS / 0 FAIL and live premium test
   32 PASS / 0 FAIL, both before and after (current premium tree via `KHP_APP_DIR`); the user's
   `~/.config/kiro-hyprland-impasto` untouched; `qs` owns the notifications; `hyprctl configerrors` empty. The shell
   log's two "QVariant cannot be used across IPC" warnings (`task.states`, `panel.names`) were already in v0.6.1.
+- Released as `26.11-14` (nemesis_repo). picard took it from the online repo over `26.11-13.1`: contract 18/0, `qs`
+  owns the notifications, `hyprctl configerrors` empty.
 
 ### Files Modified
 - `UPSTREAM`, `etc/xdg/quickshell/impasto/**` (71 files, 12 new), `etc/skel/.config/kiro-hyprland-impasto/hyprland.lua`,
