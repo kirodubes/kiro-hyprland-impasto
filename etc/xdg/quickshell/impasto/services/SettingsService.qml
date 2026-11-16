@@ -79,6 +79,7 @@ Singleton {
     readonly property alias dockRunning: config.dockRunning
     readonly property alias dockEverywhere: config.dockEverywhere
     readonly property alias dockAutohide: config.dockAutohide
+    readonly property alias dockAutohideWindows: config.dockAutohideWindows
     readonly property alias dockLauncher: config.dockLauncher
     readonly property alias weatherPlace: config.weatherPlace
     readonly property alias wallpaperFavourites: config.wallpaperFavourites
@@ -651,8 +652,9 @@ Singleton {
 
         // ── CAMERA ──────────────────────────────────────────────────
         //
-        // Off takes the virtual camera away from every program.
-        property bool cameraEnabled: true
+        // Off takes the virtual camera away from every program. Off until
+        // switched on, since a call with effects costs a core.
+        property bool cameraEnabled: false
 
         // One of `CameraService.effects`.
         property string cameraEffect: "natural"
@@ -945,6 +947,9 @@ Singleton {
         property bool dockEverywhere: true
 
         property bool dockAutohide: false
+
+        // With autohide, out on a screen whose workspace holds no window.
+        property bool dockAutohideWindows: false
 
         // Launcher button at the start of the row.
         property bool dockLauncher: true
