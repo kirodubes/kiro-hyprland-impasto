@@ -1,5 +1,28 @@
 # Changelog
 
+## 2026.11.16
+
+### What Changed
+- impasto updated from v0.6.2 to v0.6.3. The dock gets an "Only over windows" choice (Settings -> Dock): with
+  autohide on, it stays out on an empty workspace and hides once a window opens there. Off by default, so the Kiro
+  dock behaves as before.
+- Camera fixes: the camera effects no longer leak a frame on every gesture read, and the virtual camera stays off
+  until it is switched on (a call with effects costs a CPU core). This applies to new users; a saved setting stays.
+
+### Technical Details
+- Pristine import `b22d25a` on `impasto-upstream` (tag commit `311b808`), merged into `main` (`2c0c4c6`) without
+  conflicts: 6 shell files changed upstream, the only Kiro-patched one (`theme/Tr.qml`, patch 2) merged cleanly.
+  Upstream profiles unchanged, no new keys, no new packages; `1-kiro.json` needs no new line.
+- Tested as an upgrade on picard (real KiroTux Impasto install, Hyprland 0.57.2, quickshell 0.3.2): local build
+  `26.11-14.1` over `26.11-14` with `pacman -U` (`pacman -Qkk` 0 altered, nothing in `/usr` or `/etc` owned by the
+  user), shell restarted. Contract 18 PASS / 0 FAIL and live premium test 49 PASS / 0 FAIL, both before and after
+  (current premium tree via `KHP_APP_DIR`); `~/.config` restored; `qs` owns the notifications; `hyprctl
+  configerrors` empty.
+
+### Files Modified
+- `UPSTREAM`, `etc/xdg/quickshell/impasto/` (`dock/Dock.qml`, `scripts/camera.py`, `services/DockService.qml`,
+  `services/SettingsService.qml`, `settings/DockSection.qml`, `theme/Tr.qml`), `CLAUDE.md`
+
 ## 2026.11.14
 
 ### What Changed

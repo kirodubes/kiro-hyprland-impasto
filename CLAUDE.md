@@ -2,7 +2,7 @@
 
 ## Overview
 Config package for the **Kiro Hyprland Impasto edition**: Hyprland with the impasto Quickshell shell
-(andreumassanet/impasto, GPL-3.0), vendored at **v0.6.2** (see `UPSTREAM`). Sibling of
+(andreumassanet/impasto, GPL-3.0), vendored at **v0.6.3** (see `UPSTREAM`). Sibling of
 [kiro-hyprland-dms](../kiro-hyprland-dms/CLAUDE.md) and [kiro-hyprland-noctalia](../kiro-hyprland-noctalia/CLAUDE.md).
 Public, open-core, shipped via `nemesis_repo`. Base of the KiroTux Hyprland Impasto ISO (`kirotux-hypr-impasto`).
 Decisions and scope check are in the internal `Kiro-HQ/Kirotux/KIROTUX-HYPRLAND-IMPASTO-RELEASE-PLAN.md` and
@@ -33,7 +33,7 @@ Decisions and scope check are in the internal `Kiro-HQ/Kirotux/KIROTUX-HYPRLAND-
   `kirotux_apps.lua`.
 
 ## Vendored upstream: how to bump
-- Branch `impasto-upstream` holds only pristine upstream imports: `103ab24` (v0.6.0), `1dec6d5` (v0.6.1), `76d2391` (v0.6.2).
+- Branch `impasto-upstream` holds only pristine upstream imports: `103ab24` (v0.6.0), `1dec6d5` (v0.6.1), `76d2391` (v0.6.2), `b22d25a` (v0.6.3).
   `main`
   merges it, so `git diff impasto-upstream..main -- etc/xdg etc/skel usr/bin/impasto` is the patch set.
 - To bump:
@@ -48,7 +48,10 @@ Decisions and scope check are in the internal `Kiro-HQ/Kirotux/KIROTUX-HYPRLAND-
   4. Buyers upgrade from the repo, so test the **upgrade** on a real KiroTux Impasto install: ask Erik to boot
      riker or picard with that SSD (the QEMU VM is only a fallback). Run the two tests below first as a baseline,
      `pacman -U` a local build with a test pkgrel (`26.11-12.1`, so the flow's next pkgrel still upgrades), restart
-     the shell, run them again. With `KHP_APP_DIR=<tree>` they test the current premium app tree. From the
+     the shell, run them again. Restart over SSH with Lua syntax (plain `hyprctl dispatch exec ...` fails), after
+     exporting `XDG_RUNTIME_DIR` and `HYPRLAND_INSTANCE_SIGNATURE`: `hyprctl dispatch 'hl.dsp.exec_cmd("pkill -x qs;
+     sleep 0.5; qs -p /etc/xdg/quickshell/impasto -d")'`. `KHP_APP_DIR` is the app folder
+     (`<tree>/usr/share/kirotux-hyprland-premium`), not the tree root. With `KHP_APP_DIR=<tree>` they test the current premium app tree. From the
      premium app's `tests/`:
      `run-impasto-contract.sh` (headless: every IPC call, panel, layout and key description the premium Discover page
      uses) and `run-live-hyprland.sh`. Both 0 FAIL before the flow publishes. A FAIL names what upstream renamed:
