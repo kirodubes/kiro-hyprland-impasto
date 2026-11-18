@@ -613,13 +613,26 @@ QtObject {
         "accent", "accentHover", "accentText", "red", "green", "yellow", "blue"
     ]
 
+    // Kiro: the island and the desk's widgets are black in every palette, so a light palette's (Catppuccin Latte)
+    // dark text and pale grounds stay out of the shell; it still takes the accents, and GTK/Qt get the whole palette
+    // from ThemeService's push.
+    readonly property var groundTokens: ["background", "surface", "surfaceHover", "border", "text", "textMuted"]
+
+    function isLight(colors: var): bool {
+        const ground = colors.background ? Qt.color(colors.background) : null
+        return !!ground && (0.2126 * ground.r + 0.7152 * ground.g + 0.0722 * ground.b) > 0.5
+    }
+
     // Tokens a palette does not define keep their current value.
     function apply(colors: var, name: string): void {
         if (!colors)
             return
         if (name)
             root.activeName = name
+        const light = root.isLight(colors)
         for (const token of root.tokens) {
+            if (light && root.groundTokens.includes(token))
+                continue
             if (colors[token])
                 root[token === "textMuted" ? "paletteMuted" : token] = colors[token]
         }

@@ -1,5 +1,23 @@
 # Changelog
 
+## 2026.11.18
+
+### What Changed
+- Catppuccin Latte (impasto's only light palette) no longer makes the shell unreadable: the island at the top and
+  the desktop widgets are black in every palette, but took Latte's dark grey text. They now keep their white text
+  on a light palette and only take its accent colours; GTK and Qt apps still turn light. The KiroTux premium app's
+  Light choice uses this palette.
+
+### Technical Details
+- Kiro patch 10 in `theme/Theme.qml`: `apply()` skips `background`, `surface`, `surfaceHover`, `border`, `text`
+  and `textMuted` when the palette's `background` has a luminance above 0.5. `ThemeService.pushTerminal()` sends
+  the `Palettes` entry itself to `theme_manager.py`, so the GTK/Qt/terminal push is unchanged.
+- Tested in the QEMU VM (installed KiroTux Hyprland Impasto): patched file in place, shell restarted, `theme set
+  catppuccin_latte`: island clock/icons and every desktop card white on black, Thunar light.
+
+### Files Modified
+- `etc/xdg/quickshell/impasto/theme/Theme.qml`, `CLAUDE.md`
+
 ## 2026.11.16
 
 ### What Changed

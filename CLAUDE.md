@@ -84,6 +84,9 @@ Decisions and scope check are in the internal `Kiro-HQ/Kirotux/KIROTUX-HYPRLAND-
 9. `keybinds.lua`: upstream's `SUPER + Z` scratchpad pair is dropped (Kiro has it on `SUPER + U`, same
    `special:scratchpad`, `SUPER + SHIFT + U` = upstream's `scratchpad_send`); the cheatsheet window is on
    `SUPER + ALT + SHIFT + H` (`SUPER + SHIFT + H` = Narrower).
+10. `theme/Theme.qml` `apply()` + `isLight()`/`groundTokens`: a light palette (Catppuccin Latte, ground luminance
+   > 0.5) leaves the shell's text and grounds alone, so the black island and the desk's widgets keep white text;
+   it still takes the accents. GTK/Qt get the whole palette (ThemeService pushes `Palettes` directly).
 
 ## Gotchas
 - `hl.exec_cmd` (autostart) runs argv without a shell. Wrap tests and `&&` in `sh -c`. Binds (`hl.dsp.exec_cmd`) do
