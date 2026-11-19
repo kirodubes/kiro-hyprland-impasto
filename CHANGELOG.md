@@ -1,5 +1,21 @@
 # Changelog
 
+## 2026.11.19
+
+### What Changed
+- The terminal no longer shows a red config error when a noctalia edition is used on the same account after this
+  one. impasto's starter Alacritty config had its import list on one line; noctalia's Alacritty template then added
+  its own import without a comma and broke the file (seen on picard).
+
+### Technical Details
+- `scripts/alacritty-colours.sh` writes the `import` list over several lines with a trailing comma, the shape
+  noctalia's `apply.sh` (line 67, a sed that puts `"path",` before the closing `]`) expects. Its result is then
+  valid TOML; noctalia's import comes last, so its colours win in noctalia sessions. Existing configs are never
+  edited, so a file already broken this way needs a hand fix.
+
+### Files Modified
+- `etc/skel/.config/kiro-hyprland-impasto/scripts/alacritty-colours.sh`
+
 ## 2026.11.18
 
 ### What Changed

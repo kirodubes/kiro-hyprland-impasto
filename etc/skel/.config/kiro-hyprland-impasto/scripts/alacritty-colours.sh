@@ -25,5 +25,7 @@ cat > "$config" <<'EOF'
 # Created at login by kiro-hyprland-impasto: the terminal takes the wallpaper's colours from impasto,
 # which rewrites impasto-theme.toml on every wallpaper change. Add your own settings below.
 [general]
-import = ["~/.config/alacritty/impasto-theme.toml"]
+import = [
+    "~/.config/alacritty/impasto-theme.toml",
+]
 EOF
